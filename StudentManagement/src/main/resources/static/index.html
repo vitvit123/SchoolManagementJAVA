@@ -225,7 +225,6 @@
 
         <!-- Lecturer -->
 
-
          <!-- Lectures Content -->
          <div style="padding: 0px 20%;" class="lectures-content" id="Container-Fluid-Lecture">
             <h3>Lectures</h3>
@@ -318,22 +317,11 @@
 
             <!-- Course Cards -->
             <div class="row">
-                <div class="col-md-4">
-                    <div class="course-card">
-                        <h5 class="course-title">Course 1</h5>
+                <div class="col-md-4" th:each="course : ${courses}">
+                    <div class="container" id="course-container">
+                  
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <div class="course-card">
-                        <h5 class="course-title">Course 2</h5>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="course-card">
-                        <h5 class="course-title">Course 3</h5>
-                    </div>
-                </div>
-                <!-- Add more course cards here -->
             </div>
 
             <!-- Add New Course Modal -->
@@ -365,6 +353,28 @@
 
         </div>
 </div>
+
+<!-- Update Course Modal -->
+<div class="modal fade" id="updateCourseModal" tabindex="-1" aria-labelledby="updateCourseModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="updateCourseModalLabel">Update Course</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="updateCourseForm">
+                    <div class="mb-3">
+                        <label for="courseName" class="form-label">Course Name:</label>
+                        <input type="text" class="form-control" id="courseName" name="courseName" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Update Course</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
         
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <!-- Bootstrap Bundle with Popper -->
