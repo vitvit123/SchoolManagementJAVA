@@ -34,13 +34,10 @@ public class CourseController<models> {
             return "Course object is null!";
         }
     }
-
     @GetMapping("/courses")
     public List<Course> getCourses() {
         return courseRepository.findAll();
     }
-
-
     @DeleteMapping("/delete-course/{id}")
     public String deleteCourse(@NonNull @PathVariable Long id) {
         try {

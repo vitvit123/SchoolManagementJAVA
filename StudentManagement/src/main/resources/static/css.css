@@ -236,3 +236,25 @@ body {
 #Container-Fluid-Course{
     display: none;
 }
+/* Define the animation */
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.rotate-image {
+    animation: spin 2s linear infinite; 
+}
+.scrolling-text {
+    padding: 10px 0;
+    background-color: #f8f9fa; /* Set background color */
+}
+
+.marquee {
+    overflow: hidden;
+    white-space: nowrap;
+    width: 100%; /* Set the width of the marquee */
+}
+
+
+    
