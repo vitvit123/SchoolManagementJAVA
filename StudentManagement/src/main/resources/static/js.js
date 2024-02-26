@@ -70,6 +70,27 @@ $(document).ready(function() {
     })
     
 
+    $("#saveCourseBtn").on("click", function(){
+        var courseName = $("#course-title").val();
+        var courseData = {
+            courseName: courseName
+        };
+        $.ajax({
+            type: "POST",
+            url: "/save-course",
+            contentType: "application/json",
+            data: JSON.stringify(courseData),
+            success: function(response) {
+                console.log(response)
+                alert(response); 
+            },
+            error: function(xhr, status, error) {
+                // Handle errors
+                alert("An error occurred while saving the course: " + xhr.responseText);
+            }
+        });
+    });
+    
 
 
 
