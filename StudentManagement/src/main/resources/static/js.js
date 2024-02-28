@@ -1,6 +1,5 @@
 $(document).ready(function() {
 
-
     function CloseTab(){
         $("#Container-Fluid-Student").css("display","none");
         $("#container-fluid-Dashboard").css("display","none");
@@ -108,10 +107,6 @@ function fetchCourses() {
             }
         });
     });
-    
-
-
-
 // Function to display courses in HTML cards
 function displayCourses(courses) {
     var cardContainer = $("#course-container");
@@ -204,8 +199,81 @@ $(document).on("click", ".BtnCourseIDUpdate", function() {
 });
 
 
+function fetchStudent() {
+    $.ajax({
+        type: "GET",
+        url: "/Student",
+        success: function(response) {
+            var studentTableBody = $('#studentTable tbody');
+            studentTableBody.empty();
+            
+            response.forEach(function(student) {
+                var row = $('<tr>');
+                row.append($('<td>').text(student.studentId));
+                row.append($('<td>').text(student.fullname));
+                row.append($('<td>').text(student.email));
+                row.append($('<td>').text(student.dob));
+                studentTableBody.append(row);
+            });
+        },
+        error: function(xhr, status, error) {
+            console.error(xhr.responseText);
+        }
+    });
+}
+
+$('#studentTable').DataTable({
+    searching: true, // Enable searching
+    ordering: true,  // Enable sorting
+    paging: true,    // Enable pagination
+    columns: [
+        { data: 'studentId', title: 'Student ID', searchable: true },  
+        { data: 'fullname', title: 'Full Name', searchable: true },   
+        { data: 'email', title: 'Email', searchable: true },      
+        { data: 'dob', title: 'Date of Birth', searchable: true }         
+    ]
+});
+
+fetchStudent();
+
+
+
+
+
+$("#saveStudentBtn").click(function() {
+    var formData = {
+        fullname: $("#studentName").val(),
+        email: $("#studentEmail").val(),
+        dob: $("#studentDOB").val(),
+        address: $("#studentAddress").val(),
+        profile: $("#studentProfile").val().split('\\').pop(),
+        studentPhoneNumber: $("#studentPhoneNumber").val(),
+        parentName: $("#parentName").val(),
+        parentPhoneNumber: $("#parentPhoneNumber").val(),
+        password: $("#studentPassword").val()
+    };
+    $.ajax({
+        type: "POST",
+        url: "/saveStudent",
+        contentType: "application/json",
+        data: JSON.stringify(formData),
+        success: function(response) {
+            Swal.fire({
+                title: "Success",
+                text: "Student data Added successfully",
+                icon: "success"
+            }).then(()=>{
+                $("#addStudentModal").modal("hide");
+            })
+        },
+        error: function(xhr, status, error) {
+            console.error("Error saving student data:", error);
     
-    
+        }
+    });
+});
+
+
 
 
 

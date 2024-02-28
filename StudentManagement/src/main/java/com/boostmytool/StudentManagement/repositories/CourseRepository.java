@@ -1,4 +1,3 @@
-// CourseRepository.java
 package com.boostmytool.StudentManagement.repositories;
 
 import com.boostmytool.StudentManagement.models.Course;

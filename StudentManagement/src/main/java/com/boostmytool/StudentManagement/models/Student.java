@@ -1,6 +1,4 @@
 package com.boostmytool.StudentManagement.models;
-
-import java.util.Date;
 import jakarta.persistence.*;
 
 @Entity
@@ -19,7 +17,7 @@ public class Student {
     private String email;
 
     @Column(name = "DOB")
-    private Date dob;
+    private String dob;
 
     @Column(name = "Address")
     private String address;
@@ -38,6 +36,25 @@ public class Student {
 
     @Column(name = "Password")
     private String password;
+
+    public Student() {
+        // Default constructor
+    }
+    
+
+    public Student(int studentId, String fullname, String email, String dob, String address, String profile,
+    String studentPhoneNumber, String parentName, String parentPhoneNumber, String password) {
+    this.studentId = studentId;
+    this.fullname = fullname;
+    this.email = email;
+    this.dob = dob;
+    this.address = address;
+    this.profile = profile;
+    this.studentPhoneNumber = studentPhoneNumber;
+    this.parentName = parentName;
+    this.parentPhoneNumber = parentPhoneNumber;
+    this.password = password;
+    }   
 
     public int getStudentId() {
         return studentId;
@@ -63,11 +80,11 @@ public class Student {
         this.email = email;
     }
 
-    public Date getDob() {
+    public String getDob() {
         return dob;
     }
 
-    public void setDob(Date dob) {
+    public void setDob(String dob) {
         this.dob = dob;
     }
 

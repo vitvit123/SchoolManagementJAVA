@@ -50,22 +50,18 @@ public class CourseController<models> {
     }
 
     @PostMapping("/update-course/{id}")
-public ResponseEntity<String> updateCourse(@NonNull @PathVariable Long id, @RequestBody Course updatedCourse) {
+    public ResponseEntity<String> updateCourse(@NonNull @PathVariable Long id, @RequestBody Course updatedCourse) {
     try {
         Course existingCourse = courseRepository.findById(id).orElse(null);
         if (existingCourse == null) {
             return ResponseEntity.notFound().build();
         }
-        existingCourse.setCourseName(updatedCourse.getCourseName()); // Update the course name
-        courseRepository.save(existingCourse); // Save the updated course
+        existingCourse.setCourseName(updatedCourse.getCourseName()); 
+        courseRepository.save(existingCourse); 
         return ResponseEntity.ok("Course updated successfully!");
     } catch (Exception e) {
         e.printStackTrace();
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while updating the course.");
     }
 }
-
-    
-
-    
 }
