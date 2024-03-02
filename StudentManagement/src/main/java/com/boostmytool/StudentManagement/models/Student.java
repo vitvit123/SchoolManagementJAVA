@@ -38,7 +38,7 @@ public class Student {
     private String password;
 
     public Student() {
-        // Default constructor
+        
     }
     
 
@@ -135,4 +135,5 @@ public class Student {
     public void setPassword(String password) {
         this.password = password;
     }
+
 }

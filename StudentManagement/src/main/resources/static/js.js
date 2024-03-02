@@ -1,12 +1,19 @@
 $(document).ready(function() {
 
+
+    $("#BTNLogin").on("click",function(){
+        var a=$("#username").val();
+        var b=$("#password").val();
+
+    })
+
     function CloseTab(){
         $("#Container-Fluid-Student").css("display","none");
         $("#container-fluid-Dashboard").css("display","none");
         $("#Container-Fluid-Enrollment").css("display","none");
         $("#Container-Fluid-Lecture").css("display","none");
         $("#Container-Fluid-Course").css("display","none");
-
+    
     }
 
 
@@ -49,10 +56,18 @@ $(document).ready(function() {
         $("#Container-Fluid-Lecture").css("display","block");
     });
 
-
+    $("#LogoutTab").on("click",function(){
+        $("#Login_Form").css("display","block");
+        $(".sidebar").css("display","none");
+        $(".content").css("display","none");
+    })
 
     $('#addLectureBtn').on('click', function() {
         $('#addLectureModal').modal('show');
+        $("#BtnGenerateLecture").css("display","block");
+        $("#updateLectureBtn").css("display","none");
+        $("#addLectureModalLabeltext").text("Add Lecture");
+
     });
 
 
@@ -66,15 +81,35 @@ $(document).ready(function() {
     })
     $("#addStudentBtn").on("click",function(){
         $("#addStudentModal").modal("show");
+        $("#saveStudentBtn").css("display","block");
+        $("#updateStudentBtn").css("display","none");
+        $("#exampleModalLabelText").text("Add Student");
     })
+
+
+
+
+
     
 // Function to fetch courses from the backend
 function fetchCourses() {
     $.ajax({
         type: "GET",
-        url: "/courses", // Update the URL to match your backend endpoint
+        url: "/courses", 
         success: function(response) {
-            displayCourses(response); // Call function to display courses
+            displayCourses(response); 
+        var selectElement = $('#teacher-skill');
+        if (selectElement.length === 0) {
+            return;
+        }
+        selectElement.empty();
+    response.forEach(function(course) {
+     var option = $('<option>', {
+         value: course.courseName, // Assuming 'id' is used as the value for the option
+         text: course.courseName // Using 'courseName' as the text for the option
+     });
+     selectElement.append(option);
+ });
         },
         error: function(xhr, status, error) {
             console.error("Error fetching courses:", error);
@@ -183,9 +218,7 @@ $(document).on("click", ".BtnCourseIDUpdate", function() {
                     icon: "success"
                 }).then((result) => {
                     if (result.isConfirmed || result.isDismissed) {
-                        // Fetch and display the updated data
                         fetchCourses();
-                        // Hide the modal after successful update
                         $("#updateCourseModal").modal("hide");
                     }
                 });
@@ -204,16 +237,32 @@ function fetchStudent() {
         type: "GET",
         url: "/Student",
         success: function(response) {
+            var studentTable = $('#studentTable').DataTable();
+            if (studentTable) {
+                studentTable.destroy(); 
+            }
             var studentTableBody = $('#studentTable tbody');
-            studentTableBody.empty();
-            
+            studentTableBody.empty(); 
             response.forEach(function(student) {
-                var row = $('<tr>');
-                row.append($('<td>').text(student.studentId));
-                row.append($('<td>').text(student.fullname));
-                row.append($('<td>').text(student.email));
-                row.append($('<td>').text(student.dob));
-                studentTableBody.append(row);
+                studentTableBody.append(`
+                    <tr>
+                        <td>${student.studentId}</td>
+                        <td>${student.fullname}</td>
+                        <td>${student.email}</td>
+                        <td>${student.dob}</td>
+                        <td>
+                        <center>                        
+                        <input BtnDeletestudentID="${student.studentId}" type="button" value="Delete" class="btn btn-danger btndeletestudent" name="" id="">
+                        <input BtnUpdateStudentID="${student.studentId}" type="button" value="Update" class="btn btn-primary btnupdateStudent" name="" id="">
+                        </center>
+                        </td>
+                    </tr>
+                `)               
+            });
+            $('#studentTable').DataTable({
+                searching: true, 
+                ordering: true, 
+                paging: true,  
             });
         },
         error: function(xhr, status, error) {
@@ -222,24 +271,124 @@ function fetchStudent() {
     });
 }
 
-$('#studentTable').DataTable({
-    searching: true, // Enable searching
-    ordering: true,  // Enable sorting
-    paging: true,    // Enable pagination
-    columns: [
-        { data: 'studentId', title: 'Student ID', searchable: true },  
-        { data: 'fullname', title: 'Full Name', searchable: true },   
-        { data: 'email', title: 'Email', searchable: true },      
-        { data: 'dob', title: 'Date of Birth', searchable: true }         
-    ]
+$(document).on("click", ".btnupdateStudent", function(){
+    var studentId = $(this).attr('BtnUpdateStudentID'); 
+    if (studentId) { 
+        $.ajax({
+            type: "GET",
+            url: `/studentss/${studentId}`, 
+            success: function(response) {
+                $("#saveStudentBtn").css("display","none");
+                $("#updateStudentBtn").css("display","block");
+                $("#exampleModalLabelText").text("Update Student")
+                $("#addStudentModal").modal("show");
+                $("#updateStudentBtn").attr("updatestuid",studentId)
+                $('#studentName').val(response.fullname);
+                $('#studentAddress').val(response.address);
+                $('#studentDOB').val(response.dob);
+                $('#studentEmail').val(response.email);
+                $('#studentPhoneNumber').val(response.studentPhoneNumber);
+                $('#parentName').val(response.parentName);
+                $('#parentPhoneNumber').val(response.parentPhoneNumber);
+                $('#studentPassword').val(response.password);
+                $('#studentProfile').attr('src', response.profile);
+            },
+            error: function(xhr, status, error) {
+                console.error(xhr.responseText);
+                alert("Failed to retrieve student data.");
+            }
+        });
+    } else {
+        console.error("Student ID is undefined or empty.");
+    }
 });
 
+$(document).on("click", "#updateStudentBtn", function(){
+    var studentId = $(this).attr('updatestuid'); 
+    if (studentId) { 
+        // Collect updated student data from the form fields
+        var updatedStudentData = {
+            fullname: $('#studentName').val(),
+            address: $('#studentAddress').val(),
+            dob: $('#studentDOB').val(),
+            email: $('#studentEmail').val(),
+            parentName: $('#parentName').val(),
+            parentPhoneNumber: $('#parentPhoneNumber').val(),
+            password: $('#studentPassword').val(),
+            profile: $('#studentProfile').val(), // Assuming profile is a file path
+            studentPhoneNumber: $('#studentPhoneNumber').val()
+        };
+
+        // Make a PUT request to update the student data
+        $.ajax({
+            type: "PUT",
+            url: `/updateStudent/${studentId}`,
+            contentType: "application/json",
+            data: JSON.stringify(updatedStudentData),
+            success: function(response) {
+                Swal.fire({
+                    title: "Success!",
+                    text: "Student updated successfully!",
+                    icon: "success"
+                });
+                $('#studentName').val("");
+                $('#studentAddress').val("");
+                $('#studentDOB').val("");
+                $('#studentEmail').val("");
+                $('#parentName').val("");
+                $('#parentPhoneNumber').val("");
+                $('#studentPassword').val("");
+                $('#studentProfile').val("");
+                $('#studentPhoneNumber').val("");
+                $("#addStudentModal").modal("hide");
+                fetchStudent();
+            },  
+            error: function(xhr, status, error) {
+                console.error(xhr.responseText);
+                alert("Failed to update student data.");
+            }
+        });
+    } else {
+        console.error("Student ID is undefined or empty.");
+    }
+});
+
+
+
+
+
+
+
+
+
+
+
+
+$(document).on("click", ".btndeletestudent", function() {
+    var studentId = $(this).attr('btndeletestudentid');
+    $.ajax({
+        type: "DELETE",
+        url: `/deleteStudent/${studentId}`,
+        success: function(response) {
+            Swal.fire({
+                title: "Success!",
+                text: "Your Data has deleted success",
+                icon: "success"
+            })
+            fetchStudent();
+        },
+        error: function(xhr, status, error) {
+            console.error(xhr.responseText);
+            alert("Failed to delete student.");
+        }
+    });
+
+});
+
+
+
+
 fetchStudent();
-
-
-
-
-
 $("#saveStudentBtn").click(function() {
     var formData = {
         fullname: $("#studentName").val(),
@@ -264,11 +413,192 @@ $("#saveStudentBtn").click(function() {
                 icon: "success"
             }).then(()=>{
                 $("#addStudentModal").modal("hide");
+                $("#studentName").val("");
+                $("#studentEmail").val("");
+                $("#studentDOB").val("");
+                $("#studentAddress").val("");
+                $("#studentProfile").val("");
+                $("#studentPhoneNumber").val("");
+                $("#parentName").val("");
+                $("#parentPhoneNumber").val("");
+                $("#studentPassword").val("");
             })
         },
         error: function(xhr, status, error) {
             console.error("Error saving student data:", error);
+        }
+    });
+});
+
+
+
+function fetchLectureData() {
+    $.ajax({
+        url: "/getAllLectures",
+        type: "GET",
+        dataType: "json",
+    success: function(lectures) {
+    var lecturetable=$("#lectureTable").DataTable();
+    if (lecturetable) {
+        lecturetable.destroy(); 
+    }
+    var lectureTableBody=$("#lectureTable tbody");
+    lectureTableBody.empty();
+    lectures.forEach(function(lecture) {
+        lectureTableBody.append(`
+            <tr>
+                <td>${lecture.lecturerId}</td>
+                <td>${lecture.fullname}</td>
+                <td>${lecture.email}</td>
+                <td>${lecture.address}</td>
+                <td>${lecture.dob}</td>
+                <td>${lecture.skill}</td>
+                <td>
+                    <center style="display:flex;justify-content: center;">                        
+                        <input style="margin-right:10px" BtnDeletelectureID="${lecture.lecturerId}" type="button" value="Delete" class="btn btn-danger btndeletelecture" name="" id="">
+                        <input BtnUpdatelectureID="${lecture.lecturerId}" type="button" value="Update" class="btn btn-primary btnupdatelecture" name="" id="">
+                    </center>
+                </td>
+            </tr>
+        `);
+    });
+
     
+},
+
+        error: function(xhr, status, error) {
+            console.error("Error occurred while fetching lecture data: ", error);
+        }
+    });
+}
+fetchLectureData();
+
+$("#BtnGenerateLecture").on("click", function () {
+    var formData = {
+        fullname: $("#teacher-name").val(),
+        email: $("#teacher-email").val(),
+        address: $("#teacher-address").val(),
+        dob: $("#teacher-dob").val(),
+        password: $("#teacher-password").val(),
+        profile: $("#teacher-profile").val().split('\\').pop(),
+        skill: $("#teacher-skill option:selected").text()
+    };
+    $.ajax({
+        type: "POST",
+        url: "/saveLecture",
+        data: JSON.stringify(formData), 
+        contentType: "application/json",
+        success: function (response) {
+            Swal.fire({
+                title: "Success",
+                text: "Lecture data Added successfully",
+                icon: "success"
+            }).then(()=>{
+                fetchLectureData();
+                $("#addLectureModal").modal("hide");
+                $("#teacher-name").val("");
+                $("#teacher-email").val("");
+                $("#teacher-address").val("");
+                $("#teacher-dob").val("");
+                $("#teacher-password").val("");
+                $("#teacher-profile").val("");
+                $("#teacher-skill").val("");
+            })
+        },
+        error: function (xhr, status, error) {
+            console.error("Error occurred: ", xhr.responseText);
+        }
+    });
+});
+
+$(document).on("click", ".btndeletelecture", function() {
+    var lectureid = $(this).attr('btndeletelectureid'); 
+    $.ajax({
+        type: "DELETE",
+        url: `/deletelecture/${lectureid}`,
+        success: function(response) {
+            Swal.fire({
+                title: "Success!",
+                text: "Your Data has been deleted successfully",
+                icon: "success"
+            });
+            fetchLectureData();
+        },
+        error: function(xhr, status, error) {
+            console.error(xhr.responseText);
+            alert("Failed to delete lecture.");
+        }
+    });
+});
+$(document).on("click", ".btnupdatelecture", function() {
+    $('#addLectureModal').modal('show');
+    $("#BtnGenerateLecture").css("display","none");
+    $("#updateLectureBtn").css("display","block");
+    $("#addLectureModalLabeltext").text("Update Lecture");
+    var LectureUpdateID=$(this).attr("btnupdatelectureid");
+
+    $.ajax({
+        type: "GET",
+        url: "/getLectureById/" + LectureUpdateID,
+        success: function(response) {
+            $("#updateLectureBtn").attr("IDUPDATELECTURE",LectureUpdateID)
+            $("#teacher-name").val(response.fullname);
+            $("#teacher-email").val(response.email);
+            $("#teacher-address").val(response.address);
+            $("#teacher-dob").val(response.dob); 
+            $("#teacher-skill").val(response.skill).change();
+            $("#teacher-password").val(response.password);
+            $("#teacher-profile").attr('src',response.profile);
+        },
+        error: function(xhr, status, error) {
+
+        }
+    });
+
+});
+$("#updateLectureBtn").on("click", function() {
+    var updateId = $(this).attr("IDUPDATELECTURE");
+
+    var lectureData = {
+        fullname: $("#teacher-name").val(),
+        email: $("#teacher-email").val(),
+        address: $("#teacher-address").val(),
+        dob: $("#teacher-dob").val(),
+        password: $("#teacher-password").val(),
+        skill: $("#teacher-skill").val(),
+
+    };
+    
+    $.ajax({
+        type: "PUT",
+        url: "/updateLecture/" + updateId,
+        contentType: "application/json",
+        data: JSON.stringify(lectureData),
+        success: function(response) {
+            Swal.fire({
+                title: "Success!",
+                text: "Your Data has been Updated successfully",
+                icon: "success"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Reset the form fields to their initial state
+                    $("#teacher-name").val("");
+                    $("#teacher-email").val("");
+                    $("#teacher-address").val("");
+                    $("#teacher-dob").val("");
+                    $("#teacher-password").val("");
+                    $("#teacher-skill").val(""); // Assuming you want to clear the selected skill
+                    
+                    // Optionally, close the modal or perform any other actions
+                    $('#addLectureModal').modal('hide');
+                }
+            });
+            
+            fetchLectureData();
+            
+        },
+        error: function(xhr, status, error) {
+            console.error("Failed to update lecture:", xhr.responseText);
         }
     });
 });
@@ -277,4 +607,45 @@ $("#saveStudentBtn").click(function() {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+$("#loginForm").submit(function(event) {
+    event.preventDefault();
+    var formData = {
+        username: $("#username").val(),
+        password: $("#password").val()
+    };
+
+
+    $.ajax({
+        type: "POST",
+        contentType: "application/json",
+        url: "/login",
+        data: JSON.stringify(formData),
+        success: function(response) {
+            $("#loginResult").text("Login successful. User type: " + response);
+        },
+        error: function(xhr, status, error) {
+            // Handle login failure
+            $("#loginResult").text("Login failed. Error: " + xhr.responseText);
+        }
+    });
 });
+
+
+
+
+
+
+  
+
+})
