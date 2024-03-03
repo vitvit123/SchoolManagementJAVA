@@ -97,6 +97,7 @@ function fetchCourses() {
         type: "GET",
         url: "/courses", 
         success: function(response) {
+            $("#BoxTotallCourse").text(response.length);
             displayCourses(response); 
         var selectElement = $('#teacher-skill');
         if (selectElement.length === 0) {
@@ -237,6 +238,7 @@ function fetchStudent() {
         type: "GET",
         url: "/Student",
         success: function(response) {
+            $("#BoxTotallStudent").text(response.length);
             var studentTable = $('#studentTable').DataTable();
             if (studentTable) {
                 studentTable.destroy(); 
@@ -438,6 +440,7 @@ function fetchLectureData() {
         type: "GET",
         dataType: "json",
     success: function(lectures) {
+        $("#BoxTotallLecture").text(lectures.length)
     var lecturetable=$("#lectureTable").DataTable();
     if (lecturetable) {
         lecturetable.destroy(); 
@@ -445,6 +448,7 @@ function fetchLectureData() {
     var lectureTableBody=$("#lectureTable tbody");
     lectureTableBody.empty();
     lectures.forEach(function(lecture) {
+       
         lectureTableBody.append(`
             <tr>
                 <td>${lecture.lecturerId}</td>
@@ -619,27 +623,32 @@ $("#updateLectureBtn").on("click", function() {
 
 
 $("#loginForm").submit(function(event) {
-    event.preventDefault();
+    event.preventDefault(); // Prevent the default form submission
+
     var formData = {
         username: $("#username").val(),
         password: $("#password").val()
     };
 
-
+    // Send AJAX request
     $.ajax({
         type: "POST",
         contentType: "application/json",
         url: "/login",
         data: JSON.stringify(formData),
         success: function(response) {
-            $("#loginResult").text("Login successful. User type: " + response);
+            Swal.fire({
+                title: "Success!",
+                text: "Login successful. User type "+ response,
+                icon: "success"
+            })
         },
         error: function(xhr, status, error) {
-            // Handle login failure
-            $("#loginResult").text("Login failed. Error: " + xhr.responseText);
+            console.error("Login failed. Error: " + xhr.responseText);
         }
     });
 });
+
 
 
 
