@@ -13,9 +13,13 @@ $(document).ready(function() {
         $("#Container-Fluid-Enrollment").css("display","none");
         $("#Container-Fluid-Lecture").css("display","none");
         $("#Container-Fluid-Course").css("display","none");
-    
+        $("#Container-Fluid-Class").css("display","none");
     }
 
+    $('#ClassTab').on('click', function() {
+        CloseTab();
+        $("#Container-Fluid-Class").css("display","block");
+    });
 
     $('#sidebarCollapse').on('click', function() {
         $('.sidebar').toggleClass('active');
@@ -104,13 +108,13 @@ function fetchCourses() {
             return;
         }
         selectElement.empty();
-    response.forEach(function(course) {
-     var option = $('<option>', {
-         value: course.courseName, // Assuming 'id' is used as the value for the option
-         text: course.courseName // Using 'courseName' as the text for the option
-     });
-     selectElement.append(option);
- });
+        response.forEach(function(course) {
+        var option = $('<option>', {
+            value: course.courseName, // Assuming 'id' is used as the value for the option
+            text: course.courseName // Using 'courseName' as the text for the option
+        });
+        selectElement.append(option);
+    });
         },
         error: function(xhr, status, error) {
             console.error("Error fetching courses:", error);
@@ -166,6 +170,113 @@ function displayCourses(courses) {
     });
 }
     fetchCourses();
+
+
+
+
+    $("#addClassBtn").on("click",function(){
+        $("#addClassModal").modal("show");
+    });
+
+
+    $("#saveClassBtn").on("click", function(){
+        var className = $("#class-title").val();
+        var classeData = {
+            className: className
+        };
+        $.ajax({
+            type: "POST",
+            url: "/save-class",
+            contentType: "application/json",
+            data: JSON.stringify(classeData),
+            success: function(response) {
+                Swal.fire({
+                    title: "success!",
+                    text: "Class '" + className + "' added successfully",
+                    icon: "success"
+                  }).then(()=>{
+                    fetchClasses();
+                    $("#class-title").val("");
+                    $("#addClassModal").modal("hide");
+                  })
+            },
+            error: function(xhr, status, error) {
+                alert("An error occurred while saving the course: " + xhr.responseText);
+            }
+        });
+    });
+
+
+        fetchClasses();
+
+    
+        function fetchClasses() {
+            $.get("/classes", function(classes) {
+                var classListDiv = $("#classList");
+                classListDiv.empty(); // Clear previous content
+        
+                classes.forEach(function(classObj) {
+                    // Create a box-like div for each class
+                    var classBox = $("<div class='class-box'></div>");
+        
+                    // Display class name
+                    var className = $("<p>" + classObj.className + "</p>");
+                    classBox.append(className);
+        
+                    // Add update button with data-id attribute
+                    var updateBtn = $("<button class='update-btn' data-id='" + classObj.classId + "'>Update</button>");
+                    updateBtn.on("click", function() {
+                        var classId = $(this).data("id");
+                        // Handle update functionality here with classId
+                        console.log("Update button clicked for class ID: " + classId);
+                    });
+                    classBox.append(updateBtn);
+        
+                    // Add delete button with data-id attribute
+                    var deleteBtn = $("<button class='delete-btn' data-id='" + classObj.classId + "'>Delete</button>");
+                    deleteBtn.on("click", function() {
+                        var classId = $(this).data("id");
+                        deleteClass(classId);
+                    });
+                    classBox.append(deleteBtn);
+        
+                    // Append the class box to the classListDiv
+                    classListDiv.append(classBox);
+                });
+            });
+        }
+        
+        function deleteClass(classId) {
+            $.ajax({
+                url: "/delete-class/" + classId,
+                type: "DELETE",
+                success: function(response) {
+                    console.log(response);
+                    // Optionally, you can update the UI after successful deletion
+                    fetchClasses();
+                },
+                error: function(xhr, status, error) {
+                    console.error("An error occurred while deleting the class: " + xhr.responseText);
+                    // Handle error, display message to the user, etc.
+                }
+            });
+        }
+        
+    
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     $(document).on("click", ".BtnCourseIDDelete", function() {
@@ -597,64 +708,12 @@ $("#updateLectureBtn").on("click", function() {
                     $('#addLectureModal').modal('hide');
                 }
             });
-            
             fetchLectureData();
-            
         },
         error: function(xhr, status, error) {
             console.error("Failed to update lecture:", xhr.responseText);
         }
     });
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-$("#loginForm").submit(function(event) {
-    event.preventDefault(); // Prevent the default form submission
-
-    var formData = {
-        username: $("#username").val(),
-        password: $("#password").val()
-    };
-
-    // Send AJAX request
-    $.ajax({
-        type: "POST",
-        contentType: "application/json",
-        url: "/login",
-        data: JSON.stringify(formData),
-        success: function(response) {
-            Swal.fire({
-                title: "Success!",
-                text: "Login successful. User type "+ response,
-                icon: "success"
-            })
-        },
-        error: function(xhr, status, error) {
-            console.error("Login failed. Error: " + xhr.responseText);
-        }
-    });
-});
-
-
-
-
-
-
-
-  
 
 })

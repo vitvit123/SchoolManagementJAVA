@@ -4,9 +4,6 @@ body {
     margin: 0;
     padding: 0;
 }
-#Login_Form{
-    display: none;
-}
 .sidebar {
     height: 100%;
     width: 250px;
@@ -284,5 +281,37 @@ body {
     width: 100%; /* Set the width of the marquee */
 }
 
+/* Style for the class box */
+.class-box {
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 15px;
+    margin-bottom: 10px;
+}
+
+/* Style for the class name */
+.class-name {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+/* Style for the buttons */
+.update-btn,
+.delete-btn {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 3px;
+    padding: 8px 12px;
+    margin-right: 5px;
+    cursor: pointer;
+}
+
+.update-btn:hover,
+.delete-btn:hover {
+    background-color: #0056b3;
+}
 
     

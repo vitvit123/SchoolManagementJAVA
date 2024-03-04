@@ -36,11 +36,11 @@ public class LectureController {
         if (lectureOptional.isPresent()) {
             Lecture lecture = lectureOptional.get();
             return ResponseEntity.ok(lecture);
-        } else {
+        } 
+        else {
             return ResponseEntity.notFound().build();
         }
     }
-
     @SuppressWarnings("null")
     @PostMapping("/saveLecture")
     public String saveLecture(@RequestBody Lecture lecture) {

@@ -35,13 +35,11 @@ public String login(@RequestBody LoginForm loginForm) {
     Student student = studentRepository.findByFullnameAndPassword(username, password);
     if (student != null) {
         return "student";
-    }
-    
+    }   
     Lecture lecture = lectureRepository.findByFullnameAndPassword(username, password);
     if (lecture != null) {
         return "lecture";
     }
     return "invalid";
 }
-
 }
