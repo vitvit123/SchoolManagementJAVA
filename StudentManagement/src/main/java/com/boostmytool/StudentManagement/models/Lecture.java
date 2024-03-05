@@ -1,7 +1,10 @@
 package com.boostmytool.StudentManagement.models;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import jakarta.persistence.*;
+import java.text.ParseException;
+
 
 @Entity
 @Table(name = "lecturers")
@@ -66,6 +69,17 @@ public class Lecture {
 
     public Date getDob() {
         return dob;
+    }
+    // Modified setDob method to accept a String argument and parse it to Date
+    public void setDob(String dobString) {
+        try {
+            // Parse the string representation of the date to a Date object
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            this.dob = dateFormat.parse(dobString);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            // Handle the exception if parsing fails
+        }
     }
 
     public void setDob(Date dob) {

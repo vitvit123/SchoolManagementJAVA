@@ -503,22 +503,23 @@ $(document).on("click", ".btndeletestudent", function() {
 
 fetchStudent();
 $("#saveStudentBtn").click(function() {
-    var formData = {
-        fullname: $("#studentName").val(),
-        email: $("#studentEmail").val(),
-        dob: $("#studentDOB").val(),
-        address: $("#studentAddress").val(),
-        profile: $("#studentProfile").val().split('\\').pop(),
-        studentPhoneNumber: $("#studentPhoneNumber").val(),
-        parentName: $("#parentName").val(),
-        parentPhoneNumber: $("#parentPhoneNumber").val(),
-        password: $("#studentPassword").val()
-    };
+    var formData = new FormData();
+    formData.append('fullname', $("#studentName").val());
+    formData.append('email', $("#studentEmail").val());
+    formData.append('dob', $("#studentDOB").val());
+    formData.append('address', $("#studentAddress").val());
+    formData.append('studentProfile', $("#studentProfile")[0].files[0]); // Append file data
+    formData.append('studentPhoneNumber', $("#studentPhoneNumber").val());
+    formData.append('parentName', $("#parentName").val());
+    formData.append('parentPhoneNumber', $("#parentPhoneNumber").val());
+    formData.append('password', $("#studentPassword").val());
+
     $.ajax({
         type: "POST",
         url: "/saveStudent",
-        contentType: "application/json",
-        data: JSON.stringify(formData),
+        processData: false, // Prevent jQuery from automatically processing the FormData
+        contentType: false, // Prevent jQuery from setting the Content-Type
+        data: formData,
         success: function(response) {
             Swal.fire({
                 title: "Success",
@@ -586,23 +587,26 @@ function fetchLectureData() {
         }
     });
 }
+
+
 fetchLectureData();
 
 $("#BtnGenerateLecture").on("click", function () {
-    var formData = {
-        fullname: $("#teacher-name").val(),
-        email: $("#teacher-email").val(),
-        address: $("#teacher-address").val(),
-        dob: $("#teacher-dob").val(),
-        password: $("#teacher-password").val(),
-        profile: $("#teacher-profile").val().split('\\').pop(),
-        skill: $("#teacher-skill option:selected").text()
-    };
+    var formData = new FormData(); // Create FormData object
+    formData.append('fullname', $("#teacher-name").val());
+    formData.append('email', $("#teacher-email").val());
+    formData.append('address', $("#teacher-address").val());
+    formData.append('dob', $("#teacher-dob").val());
+    formData.append('password', $("#teacher-password").val());
+    formData.append('profile', $("#teacher-profile")[0].files[0]); // Append file data
+    formData.append('skill', $("#teacher-skill option:selected").text());
+    
     $.ajax({
         type: "POST",
         url: "/saveLecture",
-        data: JSON.stringify(formData), 
-        contentType: "application/json",
+        data: formData,
+        processData: false, // Prevent jQuery from processing the data
+        contentType: false, // Prevent jQuery from setting contentType
         success: function (response) {
             Swal.fire({
                 title: "Success",
@@ -618,13 +622,16 @@ $("#BtnGenerateLecture").on("click", function () {
                 $("#teacher-password").val("");
                 $("#teacher-profile").val("");
                 $("#teacher-skill").val("");
-            })
+            });
         },
         error: function (xhr, status, error) {
             console.error("Error occurred: ", xhr.responseText);
         }
     });
 });
+
+
+
 
 $(document).on("click", ".btndeletelecture", function() {
     var lectureid = $(this).attr('btndeletelectureid'); 
