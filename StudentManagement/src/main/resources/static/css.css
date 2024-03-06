@@ -1,3 +1,8 @@
+:root {
+    --body-font: "Calibri", sans-serif;
+    --bold-font: bold;
+}
+
 body {
     font-family: Arial, sans-serif;
     font-weight: bold;
@@ -5,6 +10,7 @@ body {
     margin: 0;
     padding: 0;
 }
+
 .sidebar {
     height: 100%;
     width: 250px;
@@ -125,6 +131,7 @@ body {
     align-items: center;
     margin-bottom: 20px;
 }
+
 .login-container {
     max-width: 400px;
     margin: 100px auto;
@@ -132,20 +139,25 @@ body {
     border-radius: 10px;
     padding: 30px;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-  }
-  .login-container h2 {
+}
+
+.login-container h2 {
     text-align: center;
     margin-bottom: 30px;
-  }
-  .login-form .form-group {
+}
+
+.login-form .form-group {
     margin-bottom: 20px;
-  }
-  .login-form label {
+}
+
+.login-form label {
     font-weight: bold;
-  }
-  .login-form .btn-login {
+}
+
+.login-form .btn-login {
     width: 100%;
-  }
+}
+
 .card {
     margin-bottom: 20px;
 }
@@ -233,32 +245,41 @@ body {
         height: auto;
         position: relative;
     }
+
     .sidebar ul {
         display: flex;
         flex-wrap: wrap;
     }
+
     .sidebar ul li {
         flex: 50%;
     }
 }
-#Container-Fluid-Student{
+
+#Container-Fluid-Student {
     display: none;
 }
-#lecturemodelwidth{
+
+#lecturemodelwidth {
     width: 600px;
 }
-#addStudentModal{
+
+#addStudentModal {
     display: none;
 }
-#Container-Fluid-Enrollment{
+
+#Container-Fluid-Enrollment {
     display: none;
 }
-#Container-Fluid-Lecture{
+
+#Container-Fluid-Lecture {
     display: none;
 }
-#Container-Fluid-Course{
+
+#Container-Fluid-Course {
     display: none;
 }
+
 /* Define the animation */
 /* @keyframes spin {
     0% { transform: rotate(0deg); }
@@ -268,18 +289,25 @@ body {
 .rotate-image {
     animation: spin 2s linear infinite; 
 } */
-.card-body{
+.card-body {
+    font-family: var(--body-font);
+    font-weight: var(--bold-font);
+    font-size: 22px;
+    border-radius: 5px;
     box-shadow: rgba(0, 0, 0, 0.07) 0px 1px 2px, rgba(0, 0, 0, 0.07) 0px 2px 4px, rgba(0, 0, 0, 0.07) 0px 4px 8px, rgba(0, 0, 0, 0.07) 0px 8px 16px, rgba(0, 0, 0, 0.07) 0px 16px 32px, rgba(0, 0, 0, 0.07) 0px 32px 64px;
 }
+
 .scrolling-text {
     padding: 10px 0;
-    background-color: #f8f9fa; /* Set background color */
+    background-color: #f8f9fa;
+    /* Set background color */
 }
 
 .marquee {
     overflow: hidden;
     white-space: nowrap;
-    width: 100%; /* Set the width of the marquee */
+    width: 100%;
+    /* Set the width of the marquee */
 }
 
 /* Style for the class box */
@@ -314,5 +342,3 @@ body {
 .delete-btn:hover {
     background-color: #0056b3;
 }
-
-    

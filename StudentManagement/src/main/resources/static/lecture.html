@@ -1,11 +1,102 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="lecture.css">
+    <title>Lecture Portal</title>
 </head>
+
 <body>
-    <h1>Lecture page</h1>
+    <div class="wrapper d-flex align-items-stretch">
+        <nav id="sidebar">
+            <div class="custom-menu">
+                <button type="button" id="sidebarCollapse" class="btn btn-primary">
+                    <i class="fa fa-bars"></i>
+                    <span class="sr-only"></span>
+                </button>
+            </div>
+            <div class="p-4 pt-5">
+                <img src="img/logo.png" width="40px">
+                <a href="" class="font-weight-bold" style="color:#fff;">Hello, Guest!</a>
+                <ul class="list-unstyled components mb-5">
+                    <li><a href="#">
+                            <span class="link-name">Dahsboard</span>
+                        </a></li>
+
+                    <li><a href="#">
+                            <span class="link-name">Check-In</span>
+                        </a></li>
+
+                    <li><a href="#">
+                            <span class="link-name">Check-Out</span>
+                        </a></li>
+
+                    <li><a href="#">
+                            <span class="link-name">Room</span>
+                        </a></li>
+
+
+                </ul>
+
+                <div class="mb-5">
+
+
+                    <a href="{% url 'dashboard:logout' %}" class="btn btn-danger text-white">Logout</a>
+                </div>
+
+                <div class="footer">
+                    <!-- <p>Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0.
+                        Copyright &copy;
+                        <script>document.write(new Date().getFullYear());</script> All rights reserved | This template
+                        is made with <i class="icon-heart" aria-hidden="true"></i> by <a href="https://colorlib.com"
+                            target="_blank">Colorlib.com</a>
+                        Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0.
+                    </p> -->
+                </div>
+
+            </div>
+        </nav>
+
+        <!-- Page Content  -->
+        <div id="content" class="p-4 p-md-5 pt-5">
+
+        </div>
+    </div>
+
+    <script>
+        let isMouseDown = false;
+        let startX;
+        let scrollLeft;
+
+        document.querySelector('table').addEventListener('mousedown', function (e) {
+            isMouseDown = true;
+            startX = e.pageX - document.querySelector('table').offsetLeft;
+            scrollLeft = document.querySelector('table').scrollLeft;
+        });
+
+        document.querySelector('table').addEventListener('mouseleave', function () {
+            isMouseDown = false;
+        });
+
+        document.querySelector('table').addEventListener('mouseup', function () {
+            isMouseDown = false;
+        });
+
+        document.querySelector('table').addEventListener('mousemove', function (e) {
+            if (!isMouseDown) return;
+            const x = e.pageX - document.querySelector('table').offsetLeft;
+            const walk = (x - startX) * 2; // Adjust the multiplier to control the scrolling speed
+            document.querySelector('table').scrollLeft = scrollLeft - walk;
+        });
+    </script>
+
+    <script src="boostrap/jquery.min.js"></script>
+    <script src="boostrap/popper.js"></script>
+    <script src="boostrap/bootstrap.min.js"></script>
+    <script src="boostrap/main.js"></script>
 </body>
+
 </html>
