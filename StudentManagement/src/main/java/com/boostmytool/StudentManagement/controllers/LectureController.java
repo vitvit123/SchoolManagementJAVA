@@ -8,7 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -18,7 +17,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -64,6 +62,7 @@ public class LectureController {
         if (isLectureValid(fullname, email, dob, address, profile, password, skill)) {
             try {
                 // Save the profile image to the specified directory
+                @SuppressWarnings("null")
                 String fileName = StringUtils.cleanPath(profile.getOriginalFilename());
                 Path uploadDir = Paths.get("StudentManagement/src/main/resources/static/img/lectures");
                 if (!Files.exists(uploadDir)) {

@@ -59,6 +59,7 @@ public class StudentController {
         if (isStudentValid(fullname, email, dob, address, profile, studentPhoneNumber, parentName, parentPhoneNumber, password)) {
             try {
                 // Save the profile image to the specified directory
+                @SuppressWarnings("null")
                 String fileName = StringUtils.cleanPath(profile.getOriginalFilename());
                 Path uploadDir = Paths.get("StudentManagement/src/main/resources/static/img/students");
                 if (!Files.exists(uploadDir)) {

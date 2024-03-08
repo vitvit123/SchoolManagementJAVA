@@ -37,13 +37,16 @@ public class Student {
     @Column(name = "Password")
     private String password;
 
+    @Column(name = "isEnrollment")
+    private Boolean isEnrollment;
+
     public Student() {
         
     }
     
 
     public Student(int studentId, String fullname, String email, String dob, String address, String profile,
-    String studentPhoneNumber, String parentName, String parentPhoneNumber, String password) {
+    String studentPhoneNumber, String parentName, String parentPhoneNumber, String password, boolean isEnrollment) {
     this.studentId = studentId;
     this.fullname = fullname;
     this.email = email;
@@ -54,6 +57,7 @@ public class Student {
     this.parentName = parentName;
     this.parentPhoneNumber = parentPhoneNumber;
     this.password = password;
+    this.isEnrollment = false;
     }   
 
     public int getStudentId() {

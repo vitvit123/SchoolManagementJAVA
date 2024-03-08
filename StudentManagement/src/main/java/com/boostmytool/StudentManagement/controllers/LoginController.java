@@ -10,7 +10,12 @@ import com.boostmytool.StudentManagement.repositories.LectureRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+
+
+
+
 
 @RestController
 public class LoginController {
@@ -24,14 +29,17 @@ public class LoginController {
     @Autowired
     private LectureRepository lectureRepository;
 
+
+
     @PostMapping("/login")
-public String login(@RequestBody LoginForm loginForm) {
-    String username = loginForm.getUsername(); 
-    String password = loginForm.getPassword();
-    Admin admin = adminRepository.findByUsernameAndPassword(username, password);
-    if (admin != null) {
-        return "admin";
-    }
+    @ResponseBody
+    public String login(@RequestBody LoginForm loginForm) {
+        String username = loginForm.getUsername(); 
+        String password = loginForm.getPassword();
+        Admin admin = adminRepository.findByUsernameAndPassword(username, password);
+        if (admin != null) {
+            return "admin";
+        }
     Student student = studentRepository.findByFullnameAndPassword(username, password);
     if (student != null) {
         return "student";
