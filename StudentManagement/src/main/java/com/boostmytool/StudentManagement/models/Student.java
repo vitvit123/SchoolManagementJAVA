@@ -1,8 +1,9 @@
 package com.boostmytool.StudentManagement.models;
+
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "students")
+@Table(name = "students", uniqueConstraints = {@UniqueConstraint(columnNames = "Fullname")})
 public class Student {
 
     @Id
@@ -10,7 +11,7 @@ public class Student {
     @Column(name = "StudentID")
     private int studentId;
 
-    @Column(name = "Fullname")
+    @Column(name = "Fullname", unique = true)
     private String fullname;
 
     @Column(name = "Email")

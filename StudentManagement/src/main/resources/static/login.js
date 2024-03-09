@@ -84,11 +84,6 @@ $(document).ready(function() {
                     });
                     return; 
                 }           
-                Swal.fire({
-                    title: "Success!",
-                    text: "Login successful",
-                    icon: "success"
-                });
             },
             error: function(xhr, status, error) {
                 console.error("Login failed. Error: " + xhr.responseText);

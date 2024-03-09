@@ -5,9 +5,8 @@ import java.util.Date;
 import jakarta.persistence.*;
 import java.text.ParseException;
 
-
 @Entity
-@Table(name = "lecturers")
+@Table(name = "lecturers", uniqueConstraints = {@UniqueConstraint(columnNames = "Fullname")})
 public class Lecture {
 
     @Id
@@ -15,7 +14,7 @@ public class Lecture {
     @Column(name = "LecturerID")
     private int lecturerId;
 
-    @Column(name = "Fullname")
+    @Column(name = "Fullname", unique = true)
     private String fullname;
 
     @Column(name = "Email")
@@ -70,6 +69,7 @@ public class Lecture {
     public Date getDob() {
         return dob;
     }
+
     // Modified setDob method to accept a String argument and parse it to Date
     public void setDob(String dobString) {
         try {
@@ -129,6 +129,7 @@ public class Lecture {
     public String getApproveType() {
         return approveType;
     }
+
     public void setApproveType(String approveType) {
         this.approveType = approveType;
     }

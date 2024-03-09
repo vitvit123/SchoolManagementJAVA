@@ -1,37 +1,14 @@
 $(document).ready(function() {
 
+    function getCookie(name) {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return parts.pop().split(';').shift();
+      }
+      var adminturn=(getCookie('admin'));
 
-    // function getCookie(name) {
-    //     const value = `; ${document.cookie}`;
-    //     const parts = value.split(`; ${name}=`);
-    //     if (parts.length === 2) return parts.pop().split(';').shift();
-    //   }
-    //   var prep=(getCookie('admin'));
+      $("#username").text(adminturn);
     
-
-    // function getCookies(value) {
-    //     const cookies = document.cookie.split(';');
-    //     for (let i = 0; i < cookies.length; i++) {
-    //         const cookie = cookies[i].trim();
-    //         const pair = cookie.split('=');
-    //         if (pair[1] === value) {
-    //             return pair[0];
-    //         }
-    //     }
-    //     return null;
-    // }
-    // console.log(getCookies(prep));
-
-    // if(getCookies(prep)==="admin")
-    // {
-    //     window.location.href = "admin.html";
-    // }
-    // else{
-    //     window.location.href = "index.html";
-    // }
-    
-
-
 
 
     $("#BTNLogin").on("click",function(){
@@ -589,7 +566,11 @@ $(document).ready(function() {
                 </tr>
             `);
         });
-
+        $('#lectureTable').DataTable({
+            searching: true, 
+            ordering: true, 
+            paging: true,  
+        });
         
     },
 
@@ -734,10 +715,20 @@ $(document).ready(function() {
     });
 
     $("#LogoutTab").on("click", () => {
-        document.cookie = "admin=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/";
-        window.location.href = "index.html";
-        console.log("hi")
-    });
-
+        Swal.fire({
+            title: 'Are you certain you desire to log out?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, logout'
+        }).then((result) => {
+            // If user confirms, delete cookie and redirect
+            if (result.isConfirmed) {
+                document.cookie = "admin=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/";
+                window.location.href = "index.html";
+            }
+        });
+     })
 
 })
