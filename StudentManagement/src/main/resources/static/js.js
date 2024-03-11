@@ -78,11 +78,11 @@ $(document).ready(function() {
         $("#Container-Fluid-Lecture").css("display","block");
     });
 
-    $("#LogoutTab").on("click",function(){
-        $("#Login_Form").css("display","block");
-        $(".sidebar").css("display","none");
-        $(".content").css("display","none");
-    })
+    // $("#LogoutTab").on("click",function(){
+    //     $("#Login_Form").css("display","block");
+    //     $(".sidebar").css("display","none");
+    //     $(".content").css("display","none");
+    // })
 
     $('#addLectureBtn').on('click', function() {
         $('#addLectureModal').modal('show');
@@ -845,19 +845,15 @@ $(document).ready(function() {
     function fetchStudySchedules() {
         $.ajax({
             type: "GET",
-            url: "/get-study-schedules", // URL to fetch study schedules from backend
+            url: "/get-study-schedules", 
             success: function(response) {
-
-                // Assuming 'response' is an array of objects with a 'time' property
-                var timeSelect = $("#timeEnrollment");
-                timeSelect.empty(); // Clear existing options
-    
+                var timeSelect = $("#timeEnrollment");                
+                timeSelect.empty();
                 response.forEach(function(item) {
                     var optionText = item.dayOfWeek + " - " + item.startTime + " to " + item.endTime;
                     var optionValue = item.time;
                     timeSelect.append($('<option></option>').attr('value', optionValue).text(optionText));
                 });
-                
 
                 displayStudySchedules(response); 
             },

@@ -6,7 +6,7 @@ $(document).ready(function() {
         if (parts.length === 2) return parts.pop().split(';').shift();
     }
       var studentName=(getCookie('student'));
-      $("#username").text(studentName);
+      $("#studentname").text(studentName);
 
 
 

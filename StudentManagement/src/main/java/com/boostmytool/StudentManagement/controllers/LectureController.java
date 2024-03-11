@@ -131,13 +131,10 @@ public class LectureController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to delete student");
         }
     }
-
     @PutMapping("/updateLecture/{lectureId}")
     public ResponseEntity<String> updateLecture(@PathVariable int lectureId, @RequestBody Lecture updatedLecture) {
         try {
-            // Retrieve the existing lecture from the database
             Optional<Lecture> optionalLecture = lectureRepository.findById(lectureId);
-
             // Check if the lecture exists
             if (optionalLecture.isPresent()) {
                 Lecture existingLecture = optionalLecture.get();
