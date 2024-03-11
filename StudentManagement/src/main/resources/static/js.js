@@ -78,11 +78,6 @@ $(document).ready(function() {
         $("#Container-Fluid-Lecture").css("display","block");
     });
 
-    // $("#LogoutTab").on("click",function(){
-    //     $("#Login_Form").css("display","block");
-    //     $(".sidebar").css("display","none");
-    //     $(".content").css("display","none");
-    // })
 
     $('#addLectureBtn').on('click', function() {
         $('#addLectureModal').modal('show');
