@@ -1,6 +1,7 @@
 package com.boostmytool.StudentManagement.controllers;
 
 import com.boostmytool.StudentManagement.models.Lecture;
+// import com.boostmytool.StudentManagement.models.Student;
 import com.boostmytool.StudentManagement.repositories.LectureRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -108,6 +109,16 @@ public class LectureController {
                 profile != null && !profile.isEmpty() &&
                 password != null && !password.isEmpty() &&
                 skill != null && !skill.isEmpty();
+    }
+
+    @GetMapping("/lecturesBySkill/{skill}")
+    public ResponseEntity<List<Lecture>> getLecturesBySkill(@PathVariable String skill) {
+        List<Lecture> lectures = lectureRepository.findBySkill(skill);
+        if (lectures != null && !lectures.isEmpty()) {
+            return ResponseEntity.ok(lectures);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @DeleteMapping("/deletelecture/{lectureid}")

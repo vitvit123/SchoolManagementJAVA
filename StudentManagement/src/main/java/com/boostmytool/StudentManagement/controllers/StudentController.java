@@ -126,6 +126,12 @@ public class StudentController {
         }
     }
 
+    @GetMapping("/studentsBySubject/{subject}")
+    public List<Student> getStudentsBySubject(@PathVariable String subject) {
+        return studentRepository.findBySubject(subject);
+    }
+
+
     @PutMapping("/updateStudent/{studentId}")
     public ResponseEntity<String> updateStudent(@PathVariable int studentId, @RequestBody Student updatedStudent) {
         try {
