@@ -151,6 +151,7 @@ $(document).ready(function() {
     
                 // Populate teacher skill select element if it exists
                 var selectElement = $('#teacher-skill');
+                var selectElement2 = $('#student-skill');
                 if (selectElement.length !== 0) {
                     selectElement.empty();
                     response.forEach(function(course) {
@@ -159,6 +160,17 @@ $(document).ready(function() {
                             text: course.courseName // Using 'courseName' as the text for the option
                         });
                         selectElement.append(option);
+                    });
+                }
+
+                if (selectElement2.length !== 0) {
+                    selectElement2.empty();
+                    response.forEach(function(course2) {
+                        var option = $('<option>', {
+                            value: course2.courseName, // Assuming 'courseName' is used as the value for the option
+                            text: course2.courseName // Using 'courseName' as the text for the option
+                        });
+                        selectElement2.append(option);
                     });
                 }
             },
@@ -449,6 +461,8 @@ $(document).ready(function() {
                     $('#parentPhoneNumber').val(response.parentPhoneNumber);
                     $('#studentPassword').val(response.password);
                     $('#studentProfile').attr('src', response.profile);
+                    $('#student-skill').val(response.subject);
+
                 },
                 error: function(xhr, status, error) {
                     console.error(xhr.responseText);
@@ -463,7 +477,6 @@ $(document).ready(function() {
     $(document).on("click", "#updateStudentBtn", function(){
         var studentId = $(this).attr('updatestuid'); 
         if (studentId) { 
-            // Collect updated student data from the form fields
             var updatedStudentData = {
                 fullname: $('#studentName').val(),
                 address: $('#studentAddress').val(),
@@ -473,7 +486,8 @@ $(document).ready(function() {
                 parentPhoneNumber: $('#parentPhoneNumber').val(),
                 password: $('#studentPassword').val(),
                 profile: $('#studentProfile').val(), // Assuming profile is a file path
-                studentPhoneNumber: $('#studentPhoneNumber').val()
+                studentPhoneNumber: $('#studentPhoneNumber').val(),
+                subject:$("#student-skill").val()
             };
 
             // Make a PUT request to update the student data
@@ -498,6 +512,8 @@ $(document).ready(function() {
                     $('#studentProfile').val("");
                     $('#studentPhoneNumber').val("");
                     $("#addStudentModal").modal("hide");
+                    $("#student-skill").val("");
+                    
                     fetchStudent();
                 },  
                 error: function(xhr, status, error) {
@@ -548,6 +564,7 @@ $(document).ready(function() {
         formData.append('parentName', $("#parentName").val());
         formData.append('parentPhoneNumber', $("#parentPhoneNumber").val());
         formData.append('password', $("#studentPassword").val());
+        formData.append('Subject', $("#student-skill").val());
 
         $.ajax({
             type: "POST",

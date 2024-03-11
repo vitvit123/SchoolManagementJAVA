@@ -41,13 +41,16 @@ public class Student {
     @Column(name = "isEnrollment")
     private Boolean isEnrollment;
 
+    @Column(name = "Subject")
+    private String subject;
+
     public Student() {
         
     }
     
 
     public Student(int studentId, String fullname, String email, String dob, String address, String profile,
-    String studentPhoneNumber, String parentName, String parentPhoneNumber, String password, boolean isEnrollment) {
+    String studentPhoneNumber, String parentName, String parentPhoneNumber, String password,String Subject, boolean isEnrollment) {
     this.studentId = studentId;
     this.fullname = fullname;
     this.email = email;
@@ -58,12 +61,23 @@ public class Student {
     this.parentName = parentName;
     this.parentPhoneNumber = parentPhoneNumber;
     this.password = password;
+    this.subject=Subject;
     this.isEnrollment = false;
     }   
 
     public int getStudentId() {
         return studentId;
     }
+
+    public Boolean getIsEnrollment() {
+        return isEnrollment;
+    }
+
+
+    public void setIsEnrollment(Boolean isEnrollment) {
+        this.isEnrollment = isEnrollment;
+    }
+
 
     public void setStudentId(int studentId) {
         this.studentId = studentId;
@@ -81,6 +95,8 @@ public class Student {
         return email;
     }
 
+    
+
     public void setEmail(String email) {
         this.email = email;
     }
@@ -97,6 +113,16 @@ public class Student {
         return address;
     }
 
+    public String getSubject() {
+        return subject;
+    }
+
+
+    public void setSubject(String subject) {
+        this.subject = subject;
+    }
+
+
     public void setAddress(String address) {
         this.address = address;
     }
@@ -104,6 +130,8 @@ public class Student {
     public String getProfile() {
         return profile;
     }
+
+
 
     public void setProfile(String profile) {
         this.profile = profile;

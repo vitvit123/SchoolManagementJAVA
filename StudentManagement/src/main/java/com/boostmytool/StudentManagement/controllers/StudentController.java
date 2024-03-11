@@ -54,9 +54,10 @@ public class StudentController {
             @RequestParam("dob") String dob, @RequestParam("address") String address,
             @RequestParam("studentPhoneNumber") String studentPhoneNumber,
             @RequestParam("parentName") String parentName, @RequestParam("parentPhoneNumber") String parentPhoneNumber,
-            @RequestParam("password") String password) {
+            @RequestParam("password") String password,
+            @RequestParam("Subject") String Subject) {
         // Check if the student data is valid
-        if (isStudentValid(fullname, email, dob, address, profile, studentPhoneNumber, parentName, parentPhoneNumber, password)) {
+        if (isStudentValid(fullname, email, dob, address, profile, studentPhoneNumber, parentName, parentPhoneNumber, password,Subject)) {
             try {
                 // Save the profile image to the specified directory
                 @SuppressWarnings("null")
@@ -83,6 +84,7 @@ public class StudentController {
                 student.setParentName(parentName);
                 student.setParentPhoneNumber(parentPhoneNumber);
                 student.setPassword(password);
+                student.setSubject(Subject);
     
                 studentRepository.save(student);
                 return ResponseEntity.ok("Student data saved successfully");
@@ -97,7 +99,7 @@ public class StudentController {
     
     // Define the isStudentValid method to validate student data
     private boolean isStudentValid(String fullname, String email, String dob, String address, MultipartFile profile,
-            String studentPhoneNumber, String parentName, String parentPhoneNumber, String password) {
+            String studentPhoneNumber, String parentName, String parentPhoneNumber, String password,String Subject) {
         // Perform validation logic here
         // Ensure that none of the parameters are null or empty
         return fullname != null && !fullname.isEmpty() &&
@@ -108,7 +110,8 @@ public class StudentController {
                 studentPhoneNumber != null && !studentPhoneNumber.isEmpty() &&
                 parentName != null && !parentName.isEmpty() &&
                 parentPhoneNumber != null && !parentPhoneNumber.isEmpty() &&
-                password != null && !password.isEmpty();
+                password != null && !password.isEmpty() &&
+                Subject != null && !Subject.isEmpty();
     }
     
 
@@ -142,7 +145,7 @@ public class StudentController {
                 existingStudent.setPassword(updatedStudent.getPassword());
                 existingStudent.setProfile(updatedStudent.getProfile());
                 existingStudent.setStudentPhoneNumber(updatedStudent.getStudentPhoneNumber());
-
+                existingStudent.setSubject(updatedStudent.getSubject());
                 studentRepository.save(existingStudent);
 
                 return ResponseEntity.ok("Student updated successfully");
