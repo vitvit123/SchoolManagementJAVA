@@ -33,8 +33,44 @@ public class LeaveRequest {
     @Column(name = "IsCompleted")
     private boolean isCompleted;
 
+    @ManyToOne
+    @JoinColumn(name = "ClassID") 
+    private Class myClass;
+
+    @ManyToOne
+    @JoinColumn(name = "TimeID") 
+    private StudySchedule studyTime;
+
+    @Column(name = "ApproveID")
+    private String approveId;
+
+
     public int getLeaveId() {
         return leaveId;
+    }
+
+    public Class getMyClass() {
+        return myClass;
+    }
+
+    public void setMyClass(Class myClass) {
+        this.myClass = myClass;
+    }
+
+    public StudySchedule getStudyTime() {
+        return studyTime;
+    }
+
+    public void setStudyTime(StudySchedule studyTime) {
+        this.studyTime = studyTime;
+    }
+
+    public String getApproveId() {
+        return approveId;
+    }
+
+    public void setApproveId(String approveId) {
+        this.approveId = approveId;
     }
 
     public void setLeaveId(int leaveId) {
