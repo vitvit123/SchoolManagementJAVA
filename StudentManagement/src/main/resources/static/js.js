@@ -24,12 +24,20 @@ $(document).ready(function() {
         $("#Container-Fluid-Lecture").css("display","none");
         $("#Container-Fluid-Course").css("display","none");
         $("#Container-Fluid-Class").css("display","none");
+        $("#timeScheduleModal").css("display","none");
     }
 
     $('#ClassTab').on('click', function() {
         CloseTab();
         $("#Container-Fluid-Class").css("display","block");
     });
+
+
+    $('#ScheduleTab').on('click', function() {
+        CloseTab();
+        $("#timeScheduleModal").css("display","block");
+    });
+
 
     $('#sidebarCollapse').on('click', function() {
         $('.sidebar').toggleClass('active');
@@ -86,9 +94,21 @@ $(document).ready(function() {
 
 
     $("#EnrollmentTab").on("click", function() {
+        $("#enrollmentModalwarning").modal("show");
         CloseTab();
-        $("#Container-Fluid-Enrollment").css("display","block");
+        $("#Container-Fluid-Enrollment").css("display", "block");
     });
+
+
+    document.querySelector('#enrollmentModalwarning .modal-footer .btn-secondary').addEventListener('click', function() {
+        $('#enrollmentModalwarning').modal('hide'); 
+    });
+    
+
+
+    
+
+
 
     $("#addCourseBtn").on("click",function(){
         $("#addCourseModal").modal("show");
@@ -111,20 +131,36 @@ $(document).ready(function() {
             type: "GET",
             url: "/courses", 
             success: function(response) {
+                $('#course').empty();
+                
+    
+                // Loop through the courses and populate the select options
+                response.forEach(function(course) {
+                    var option = $('<option>', {
+                        value: course.courseName, // Assuming 'courseName' is used as the value for the option
+                        text: course.courseName // Using 'courseName' as the text for the option
+                    });
+                    $('#course').append(option);
+                });
+    
+                // Update the total course count
                 $("#BoxTotallCourse").text(response.length);
-                displayCourses(response); 
-            var selectElement = $('#teacher-skill');
-            if (selectElement.length === 0) {
-                return;
-            }
-            selectElement.empty();
-            response.forEach(function(course) {
-            var option = $('<option>', {
-                value: course.courseName, // Assuming 'id' is used as the value for the option
-                text: course.courseName // Using 'courseName' as the text for the option
-            });
-            selectElement.append(option);
-        });
+    
+                // Display courses
+                displayCourses(response);
+    
+                // Populate teacher skill select element if it exists
+                var selectElement = $('#teacher-skill');
+                if (selectElement.length !== 0) {
+                    selectElement.empty();
+                    response.forEach(function(course) {
+                        var option = $('<option>', {
+                            value: course.courseName, // Assuming 'courseName' is used as the value for the option
+                            text: course.courseName // Using 'courseName' as the text for the option
+                        });
+                        selectElement.append(option);
+                    });
+                }
             },
             error: function(xhr, status, error) {
                 console.error("Error fetching courses:", error);
@@ -223,7 +259,13 @@ $(document).ready(function() {
     function fetchClasses() {
         $.get("/classes", function(classes) {
             var classListDiv = $("#classList");
+            var classSelect = $("#classSelect"); // Select element to populate
+    
             classListDiv.empty(); // Clear previous content
+            classSelect.empty(); // Clear previous options
+    
+            // Add a default option
+            classSelect.append($('<option value="">-- Select Class --</option>'));
     
             classes.forEach(function(classObj) {
                 // Create a box-like div for each class
@@ -252,9 +294,16 @@ $(document).ready(function() {
     
                 // Append the class box to the classListDiv
                 classListDiv.append(classBox);
+    
+                // Populate the select element with class options
+                classSelect.append($('<option>', {
+                    value: classObj.classId, // Assuming 'classId' is used as the value for the option
+                    text: classObj.className // Using 'className' as the text for the option
+                }));
             });
         });
     }
+    
     
     function deleteClass(classId) {
         $.ajax({
@@ -310,8 +359,6 @@ $(document).ready(function() {
         var currentCourseName = $(this).closest(".card-body").find(".card-title").text(); // Get the current course name
         $("#updateCourseModal").modal("show"); // Show the modal popup
         $("#updateCourseModal #courseName").val(currentCourseName); // Populate the modal with the current course name
-
-        // Event handler for submitting the update form inside the modal
         $("#updateCourseForm").off("submit").on("submit", function(event) {
             event.preventDefault(); // Prevent default form submission
             var updatedCourseName = $("#updateCourseModal #courseName").val(); // Get the updated course name
@@ -730,5 +777,194 @@ $(document).ready(function() {
             }
         });
      })
+
+     $("#addScheduleBtn").on("click", function() {
+        $("#timeScheduleModals").modal("show");
+        $("#UpdateTime").css("display","none");
+        $("#saveStudyScheduleBtn").css("display","block");
+
+
+    });
+
+     $("#saveStudyScheduleBtn").on("click", function() {
+        var dayOfWeek = $("#dayOfWeek").val();
+        var startTime = $("#startTime").val();
+        var endTime = $("#endTime").val();
+        var studyScheduleData = {
+            dayOfWeek: dayOfWeek,
+            startTime: startTime,
+            endTime: endTime
+        };
+        $.ajax({
+            type: "POST",
+            url: "/save-study-schedule",
+            contentType: "application/json",
+            data: JSON.stringify(studyScheduleData),
+            success: function(response) {
+                Swal.fire({
+                    title: "Success!",
+                    text: "Study schedule saved successfully!",
+                    icon: "success",
+                    confirmButtonText: "OK"
+                }).then((result) => {
+                    // Clear input fields upon confirmation
+                    if (result.isConfirmed) {
+                        $("#dayOfWeek").val("");
+                        $("#startTime").val("");
+                        $("#endTime").val("");
+                        $("#timeScheduleModals").modal("hide");
+                        fetchStudySchedules();
+                    }
+                });
+            },
+            error: function(xhr, status, error) {
+                alert("An error occurred while saving study schedule: " + xhr.responseText);
+            }
+        });
+    });
+
+
+    function fetchStudySchedules() {
+        $.ajax({
+            type: "GET",
+            url: "/get-study-schedules", // URL to fetch study schedules from backend
+            success: function(response) {
+
+                // Assuming 'response' is an array of objects with a 'time' property
+                var timeSelect = $("#timeEnrollment");
+                timeSelect.empty(); // Clear existing options
+    
+                response.forEach(function(item) {
+                    var optionText = item.dayOfWeek + " - " + item.startTime + " to " + item.endTime;
+                    var optionValue = item.time;
+                    timeSelect.append($('<option></option>').attr('value', optionValue).text(optionText));
+                });
+                
+
+                displayStudySchedules(response); 
+            },
+            error: function(xhr, status, error) {
+                alert("An error occurred while fetching study schedules: " + xhr.responseText);
+            }
+        });
+    }
+    function displayStudySchedules(schedules) {
+
+        
+        var tableBody = $("#studyScheduleTableBody");
+        tableBody.empty();
+    
+        schedules.forEach(function(schedule) {
+            var row = $("<tr>");
+            row.append("<td>" + schedule.dayOfWeek + "</td>");
+            row.append("<td>" + schedule.startTime + "</td>");
+            row.append("<td>" + schedule.endTime + "</td>");
+        var actionColumn = $("<td>");
+        var updateButton = $('<button dataid style="margin-right: 5px;"">').text("Update").attr("data-id", schedule.timeId).addClass("btn btn-primary btn-sm btnupdatetime").click(function() {
+            handleUpdate(schedule);
+        });
+        var deleteButton = $("<button >").text("Delete").addClass("btn btn-danger btn-sm").click(function() {
+            handleDelete(schedule);
+        });
+        actionColumn.append(updateButton);
+        actionColumn.append(deleteButton);
+        row.append(actionColumn);
+            tableBody.append(row);
+        });
+    }
+
+    fetchStudySchedules();
+
+function handleDelete(schedule) {
+    Swal.fire({
+        title: 'Are you sure?',
+        text: 'You will not be able to recover this study schedule!',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                type: 'DELETE',
+                url: '/delete-study-schedule/' + schedule.timeId,
+                success: function(response) {
+                    $("#scheduleRow_" + schedule.timeId).remove();
+                    Swal.fire('Deleted!', 'Study schedule has been deleted.', 'success');
+                    fetchStudySchedules();
+                },
+                error: function(xhr, status, error) {
+                    Swal.fire('Error!', 'An error occurred while deleting the study schedule: ' + error, 'error');
+                }
+            });
+        }
+    });
+}
+
+
+function handleUpdate(schedule) {
+    $("#dayOfWeek").val(schedule.dayOfWeek);
+    $("#startTime").val(schedule.startTime);
+    $("#endTime").val(schedule.endTime);
+
+    $("#timeScheduleModals").modal("show");
+    
+    $("#UpdateTime").css("display","block");
+    $("#saveStudyScheduleBtn").css("display","none");
+    $("#UpdateTime").attr("timeIdUpdate", schedule.timeId);
+
+}
+
+
+
+$(document).on("click", "#UpdateTime", function() {
+  
+    var updatedDayOfWeek = $("#dayOfWeek").val();
+    var updatedStartTime = $("#startTime").val();
+    var updatedEndTime = $("#endTime").val();
+
+
+    var timeId = $(this).attr("timeidupdate");
+
+
+    if (timeId === undefined || timeId === null) {
+        console.error("Error: Unable to retrieve timeId.");
+        return;
+    }
+
+
+    var updatedSchedule = {
+        dayOfWeek: updatedDayOfWeek,
+        startTime: updatedStartTime,
+        endTime: updatedEndTime
+    };
+
+    $.ajax({
+        type: "PUT",
+        url: "/update-study-schedule/" + timeId,
+        contentType: "application/json",
+        data: JSON.stringify(updatedSchedule),
+        success: function(response) {
+            Swal.fire({
+                title: "Success!",
+                text: response,
+                icon: "success",
+            }).then(() => {
+                $("#dayOfWeek").val("");
+                $("#startTime").val("");
+                $("#endTime").val("");
+                $("#timeScheduleModals").modal("hide");
+                fetchStudySchedules();
+            });
+        },
+        error: function(xhr, status, error) {
+
+        }
+    });
+});
+
+
+
 
 })

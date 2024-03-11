@@ -29,6 +29,7 @@
             <li id="StudentTab"><a href="#">Students</a></li>
             <li id="CoursesTab"><a href="#">Courses</a></li>
             <li id="ClassTab"><a href="#">Class</a></li>
+            <li id="ScheduleTab"><a href="#">Time Schedule</a></li>
             <li id="TeachersTab"><a href="#">Teachers</a></li>
             <li id="EnrollmentTab"><a href="#">Enrollment</a></li>
             <li id="LogoutTab"><a href="#">Logout</a></li>
@@ -279,44 +280,54 @@
                     <div class="enrollment-form">
                         <h3>Enroll Student</h3>
                         <form>
-                            <div class="form-group">
-                                <label for="studentSelect">Select Student:</label>
-                                <select class="form-control" id="studentSelect">
-                                    <option value="">-- Select Student --</option>
-
-                                </select>
+                            <div style="display: flex;">
+                                <div>
+                                    <div class="form-group">
+                                        <label for="classSelect">Select Class:</label>
+                                        <select style="width: 320px;" class="form-control" id="classSelect">
+                                          
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="startDate">Start Date:</label>
+                                        <input type="date" class="form-control" id="startDate">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="endDate">End Date:</label>
+                                        <input type="date" class="form-control" id="endDate">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="course">Course:</label>
+                                        <select class="form-control" id="course"></select>
+                                    </div>                                    
+                                </div>
+                                <hr class="vertical-line">
+                                <div style="margin-left: 12px;">
+                                    <div class="form-group">
+                                        <label for="time">Time:</label>
+                                        <select style="width: 320px;" class="form-select" id="timeEnrollment">
+                                            <!-- Time options will be dynamically populated here -->
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="studentSelect">Select Student:</label>
+                                        <select style="width: 320px;" class="form-control" id="studentSelect">
+                                            <option value="">-- Select Student --</option>
+        
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="lecturerSelect">Select Lecturer:</label>
+                                        <select style="width: 320px;" class="form-control" id="lecturerSelect">
+                                            <option value="">-- Select Lecturer --</option>
+                                            <!-- Populate options dynamically here -->
+                                        </select>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="form-group">
-                                <label for="lecturerSelect">Select Lecturer:</label>
-                                <select class="form-control" id="lecturerSelect">
-                                    <option value="">-- Select Lecturer --</option>
-                                    <!-- Populate options dynamically here -->
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="classSelect">Select Class:</label>
-                                <select class="form-control" id="classSelect">
-                                    <option value="">-- Select Class --</option>
-                                    <!-- Populate options dynamically here -->
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="startDate">Start Date:</label>
-                                <input type="date" class="form-control" id="startDate">
-                            </div>
-                            <div class="form-group">
-                                <label for="endDate">End Date:</label>
-                                <input type="date" class="form-control" id="endDate">
-                            </div>
-                            <div class="form-group">
-                                <label for="course">Course:</label>
-                                <input type="text" class="form-control" id="course">
-                            </div>
-                            <div class="form-group">
-                                <label for="time">Time:</label>
-                                <input type="time" class="form-control" id="time">
-                            </div>
-                            <button type="submit" class="btn btn-primary">Enroll</button>
+                            
+                            
+                            <button type="submit" style="width: 120px;" class="btn btn-primary">Enroll</button>
                         </form>
                     </div>
                 </div>
@@ -504,6 +515,81 @@
             </div>
 
         </div>
+
+
+        <div id="timeScheduleModal" style="display: none;">
+            <h3>Schedule</h3>
+            <button style="margin-bottom: 40px;" type="button" class="btn btn-primary" id="addScheduleBtn"
+                data-toggle="modal" data-target="#timeScheduleModals">Add Schedule</button>
+
+
+
+                <div class="container">
+                    <h3>Study Schedules</h3>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Day of Week</th>
+                                <th>Start Time</th>
+                                <th >End Time</th>
+                                <th>Action</th>
+
+                            </tr>
+                        </thead>
+                        <tbody id="studyScheduleTableBody">
+                            <!-- Data will be dynamically populated here -->
+                        </tbody>
+                    </table>
+                </div>
+            
+
+        
+            <div class="modal fade" id="timeScheduleModals" tabindex="-1" role="dialog"
+                aria-labelledby="timeScheduleModals" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="studyScheduleModalLabel">Study Schedule</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="studyScheduleForm">
+                                <div class="form-group">
+                                    <label for="dayOfWeek">Day of Week</label>
+                                    <select class="form-select" id="dayOfWeek">
+                                        <option value="Mon-Sat">Mon-Sat</option>
+                                        <option value="Sat-Fri">Sat-Fri</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="startTime">Start Time</label>
+                                    <input type="time" class="form-control" id="startTime">
+                                </div>
+                                <div class="form-group">
+                                    <label for="endTime">End Time</label>
+                                    <input type="time" class="form-control" id="endTime">
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary" id="saveStudyScheduleBtn">Save changes</button>
+                            <button type="button" style="display: none;" class="btn btn-primary" id="UpdateTime">Update</button>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        
+        
+        
+        
+        
+        
     </div>
 
     <!-- Update Course Modal -->
@@ -529,8 +615,50 @@
     </div>
 
 
+    <div class="modal fade" id="enrollmentModalwarning" tabindex="-1" role="dialog" aria-labelledby="enrollmentModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content" style="width: 620px;">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="enrollmentModalLabel">
+                        <i style="color: rgb(228, 244, 5);" class="fas fa-exclamation-triangle"></i> Warning
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Please review the enrollment process before proceeding.</p>
+                    <p><strong>Important:</strong> Make sure to complete each step of the enrollment process in order, from top to bottom.</p>
+                    <p>For Start Date & End Date mush be the same in a class</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    
 
 
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+    
+    
+    
+    
 
 
 
@@ -540,20 +668,19 @@
 
 
     <!-- Bootstrap Bundle with Popper -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 
-    <!-- jQuery -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-    <script src="https://cdn.jsdelivr.net/npm/tableexport.jquery.plugin@1.28.0/tableExport.min.js"></script>
-    <!-- DataTables JavaScript -->
-    <script type="text/javascript" charset="utf8"
-        src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
+<!-- DataTables JavaScript -->
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
 
-    <!-- SweetAlert JS -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <!-- Your custom JavaScript -->
-    <script src="js.js"></script>
+<!-- SweetAlert JS -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<!-- Your custom JavaScript -->
+<script src="js.js"></script>
 </body>
 
 </html>

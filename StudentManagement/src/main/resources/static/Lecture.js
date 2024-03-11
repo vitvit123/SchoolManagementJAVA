@@ -9,11 +9,6 @@ $(document).ready(function() {
       var LectureName=(getCookie('lecture'));
       $("#username").text(LectureName);
 
-
-
-
-
-
  $("#Logoutbotton").on("click",()=>{
 Swal.fire({
         title: 'Are you certain you desire to log out?',
