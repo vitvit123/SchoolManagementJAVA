@@ -4,6 +4,8 @@ import com.boostmytool.StudentManagement.models.Lecture;
 // import com.boostmytool.StudentManagement.models.Student;
 import com.boostmytool.StudentManagement.repositories.LectureRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import javax.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -40,6 +43,30 @@ public class LectureController {
     @GetMapping("/getAllLectures")
     public List<Lecture> getAllLectures() {
         return lectureRepository.findAll();
+    }
+
+    @GetMapping("/getLectureProfileImage/{lectureId}")
+    public ResponseEntity<Resource> getLectureProfileImage(@PathVariable int lectureId) {
+        // Retrieve lecture profile image based on lecture ID
+        Optional<Lecture> lectureOptional = lectureRepository.findById(lectureId);
+        if (lectureOptional.isPresent()) {
+            Lecture lecture = lectureOptional.get();
+            try {
+                Path imagePath = Paths
+                        .get("StudentManagement/src/main/resources/static/img/lectures/" + lecture.getProfile());
+                Resource resource = new UrlResource(imagePath.toUri());
+                if (resource.exists() && resource.isReadable()) {
+                    return ResponseEntity.ok().body(resource);
+                } else {
+                    return ResponseEntity.notFound().build();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            }
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @GetMapping("/getLectureById/{lectureId}")
@@ -131,6 +158,7 @@ public class LectureController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to delete student");
         }
     }
+
     @PutMapping("/updateLecture/{lectureId}")
     public ResponseEntity<String> updateLecture(@PathVariable int lectureId, @RequestBody Lecture updatedLecture) {
         try {

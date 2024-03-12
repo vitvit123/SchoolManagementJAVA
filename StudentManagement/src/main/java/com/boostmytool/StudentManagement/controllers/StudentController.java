@@ -8,6 +8,7 @@ import java.nio.file.StandardCopyOption;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,9 +33,55 @@ public class StudentController {
     @Autowired
     private StudentRepository studentRepository;
 
+    @GetMapping("/get-profile-image/{studentId}")
+    public ResponseEntity<byte[]> getProfileImage(@PathVariable int studentId) {
+        // Inject student repository
+        // Assuming you've already defined StudentRepository bean somewhere in your
+        // application
+        // If you're using field injection, make sure @Autowired annotation is present
+        // If you're using constructor injection, make sure you have a constructor
+        // accepting StudentRepository as a parameter
+
+        // Fetch student data from the database repository
+        Optional<Student> optionalStudent = studentRepository.findById(studentId);
+
+        // Check if student exists
+        if (optionalStudent.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        Student student = optionalStudent.get();
+        // Check if student has a profile image
+        if (student.getProfile() == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        // Construct image path
+        String imagePath = "StudentManagement/src/main/resources/static/img/students/" + student.getProfile();
+        student.setProfile(imagePath);
+
+        // Read image data from file system
+        try {
+            Path path = Paths.get(imagePath);
+            byte[] imageData = Files.readAllBytes(path);
+            // Return image data
+            return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(imageData);
+        } catch (IOException e) {
+            // Handle potential exceptions during file reading
+            e.printStackTrace(); // Handle this exception more gracefully in production
+            return ResponseEntity.notFound().build();
+        }
+    }
+
     @GetMapping("/Student")
     public List<Student> getStudents() {
-        return studentRepository.findAll();
+        List<Student> students = studentRepository.findAll();
+        for (Student student : students) {
+            // Assuming profile contains only the filename without the path
+            student.setProfile(student.getProfile()); // You can adjust this if the filename needs prefixing or
+                                                      // suffixing
+        }
+        return students;
     }
 
     @GetMapping("/studentss/{studentId}")
@@ -57,7 +104,8 @@ public class StudentController {
             @RequestParam("password") String password,
             @RequestParam("Subject") String Subject) {
         // Check if the student data is valid
-        if (isStudentValid(fullname, email, dob, address, profile, studentPhoneNumber, parentName, parentPhoneNumber, password,Subject)) {
+        if (isStudentValid(fullname, email, dob, address, profile, studentPhoneNumber, parentName, parentPhoneNumber,
+                password, Subject)) {
             try {
                 // Save the profile image to the specified directory
                 @SuppressWarnings("null")
@@ -72,7 +120,7 @@ public class StudentController {
                     e.printStackTrace();
                     return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to save profile image");
                 }
-    
+
                 // Save student data to database
                 Student student = new Student();
                 student.setFullname(fullname);
@@ -85,7 +133,7 @@ public class StudentController {
                 student.setParentPhoneNumber(parentPhoneNumber);
                 student.setPassword(password);
                 student.setSubject(Subject);
-    
+
                 studentRepository.save(student);
                 return ResponseEntity.ok("Student data saved successfully");
             } catch (Exception e) {
@@ -96,10 +144,10 @@ public class StudentController {
             return ResponseEntity.badRequest().body("Invalid student data. Please ensure all fields are filled.");
         }
     }
-    
+
     // Define the isStudentValid method to validate student data
     private boolean isStudentValid(String fullname, String email, String dob, String address, MultipartFile profile,
-            String studentPhoneNumber, String parentName, String parentPhoneNumber, String password,String Subject) {
+            String studentPhoneNumber, String parentName, String parentPhoneNumber, String password, String Subject) {
         // Perform validation logic here
         // Ensure that none of the parameters are null or empty
         return fullname != null && !fullname.isEmpty() &&
@@ -113,7 +161,6 @@ public class StudentController {
                 password != null && !password.isEmpty() &&
                 Subject != null && !Subject.isEmpty();
     }
-    
 
     @DeleteMapping("/deleteStudent/{studentId}")
     public ResponseEntity<String> deleteStudent(@PathVariable int studentId) {
@@ -130,7 +177,6 @@ public class StudentController {
     public List<Student> getStudentsBySubject(@PathVariable String subject) {
         return studentRepository.findBySubject(subject);
     }
-
 
     @PutMapping("/updateStudent/{studentId}")
     public ResponseEntity<String> updateStudent(@PathVariable int studentId, @RequestBody Student updatedStudent) {

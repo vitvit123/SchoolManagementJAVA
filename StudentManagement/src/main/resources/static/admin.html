@@ -5,17 +5,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Manage School</title>
-<!-- Bootstrap CSS -->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
 
-<!-- Font Awesome -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" rel="stylesheet">
 
-<!-- DataTables CSS -->
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
 
-<!-- Your custom CSS -->
-<link rel="stylesheet" href="css.css">
+    <!-- Your custom CSS -->
+    <link rel="stylesheet" href="css.css">
 </head>
 
 <body>
@@ -34,7 +34,7 @@
             <li id="EnrollmentTab"><a href="#"><i class="fas fa-user-plus"></i> Enrollment</a></li>
             <li id="LogoutTab"><a href="#"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
         </ul>
-        
+
     </div>
     <div class="content">
         <div class="top-bar">
@@ -43,7 +43,7 @@
                     <div class="col" style="display: flex;">
                         <span style="color: darkgrey;" class="admin-name">Admin Name :</span>
                         <span style="margin-top: -2px;font-size: 20px;" id="username"></span>
-                     
+
                     </div>
                 </div>
             </div>
@@ -116,6 +116,9 @@
                                         <center>Date of Birth</center>
                                     </th>
                                     <th>
+                                        <center>Image</center>
+                                    </th>
+                                    <th>
                                         <center>Action</center>
                                     </th>
 
@@ -125,7 +128,7 @@
                                 <!-- Table rows will be dynamically generated using JavaScript -->
                             </tbody>
                         </table>
-
+                    
                     </div>
                 </div>
             </div>
@@ -215,13 +218,12 @@
                                 <input type="text" class="form-control" name="studentPhoneNumber"
                                     id="studentPhoneNumber">
                             </div>
-                            
+
                             <div class="form-group" style="margin-top: 20px;">
                                 <label for="studentMajor">Student's Major</label>
-                                <select class="form-select" aria-label="Default select example"
-                                id="student-skill">
-                                <option selected>Open this select menu</option>
-                            </select>  
+                                <select class="form-select" aria-label="Default select example" id="student-skill">
+                                    <option selected>Open this select menu</option>
+                                </select>
                             </div>
                         </div>
 
@@ -243,7 +245,7 @@
                 data-toggle="modal" data-target="#addClassModal">Add Class</button>
 
             <div id="classList"></div>
-            
+
 
 
             <div class="modal fade" id="addClassModal" tabindex="-1" role="dialog" aria-labelledby="addClassModalLabel"
@@ -295,7 +297,7 @@
                                     <div class="form-group">
                                         <label for="classSelect">Select Class:</label>
                                         <select style="width: 320px;" class="form-control" id="classSelect">
-                                          
+
                                         </select>
                                     </div>
                                     <div class="form-group">
@@ -309,7 +311,7 @@
                                     <div class="form-group">
                                         <label for="course">Course:</label>
                                         <select class="form-control" id="course"></select>
-                                    </div>                                    
+                                    </div>
                                 </div>
                                 <hr class="vertical-line">
                                 <div style="margin-left: 12px;">
@@ -323,7 +325,7 @@
                                         <label for="studentSelect">Select Student:</label>
                                         <select style="width: 320px;" class="form-control" id="studentSelect">
                                             <option value="">-- Select Student --</option>
-        
+
                                         </select>
                                     </div>
                                     <div class="form-group">
@@ -335,8 +337,8 @@
                                     </div>
                                 </div>
                             </div>
-                            
-                            
+
+
                             <button type="submit" style="width: 120px;" class="btn btn-primary">Enroll</button>
                         </form>
                     </div>
@@ -534,26 +536,26 @@
 
 
 
-                <div class="container">
-                    <h3>Study Schedules</h3>
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th>Day of Week</th>
-                                <th>Start Time</th>
-                                <th >End Time</th>
-                                <th>Action</th>
+            <div class="container">
+                <h3>Study Schedules</h3>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Day of Week</th>
+                            <th>Start Time</th>
+                            <th>End Time</th>
+                            <th>Action</th>
 
-                            </tr>
-                        </thead>
-                        <tbody id="studyScheduleTableBody">
-                            <!-- Data will be dynamically populated here -->
-                        </tbody>
-                    </table>
-                </div>
-            
+                        </tr>
+                    </thead>
+                    <tbody id="studyScheduleTableBody">
+                        <!-- Data will be dynamically populated here -->
+                    </tbody>
+                </table>
+            </div>
 
-        
+
+
             <div class="modal fade" id="timeScheduleModals" tabindex="-1" role="dialog"
                 aria-labelledby="timeScheduleModals" aria-hidden="true">
                 <div class="modal-dialog" role="document">
@@ -585,21 +587,23 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary" id="saveStudyScheduleBtn">Save changes</button>
-                            <button type="button" style="display: none;" class="btn btn-primary" id="UpdateTime">Update</button>
+                            <button type="button" class="btn btn-primary" id="saveStudyScheduleBtn">Save
+                                changes</button>
+                            <button type="button" style="display: none;" class="btn btn-primary"
+                                id="UpdateTime">Update</button>
 
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        
-        
-        
-        
-        
-        
-        
+
+
+
+
+
+
+
     </div>
 
     <!-- Update Course Modal -->
@@ -625,7 +629,8 @@
     </div>
 
 
-    <div class="modal fade" id="enrollmentModalwarning" tabindex="-1" role="dialog" aria-labelledby="enrollmentModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal fade" id="enrollmentModalwarning" tabindex="-1" role="dialog"
+        aria-labelledby="enrollmentModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content" style="width: 620px;">
                 <div class="modal-header">
@@ -638,7 +643,8 @@
                 </div>
                 <div class="modal-body">
                     <p>Please review the enrollment process before proceeding.</p>
-                    <p><strong>Important:</strong> Make sure to complete each step of the enrollment process in order, from top to bottom.</p>
+                    <p><strong>Important:</strong> Make sure to complete each step of the enrollment process in order,
+                        from top to bottom.</p>
                     <p>For Start Date & End Date mush be the same in a class</p>
                 </div>
                 <div class="modal-footer">
@@ -647,13 +653,6 @@
             </div>
         </div>
     </div>
-    
-    
-
-
-
-
-    
 
 
 
@@ -665,10 +664,17 @@
 
 
 
-    
-    
-    
-    
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -678,19 +684,20 @@
 
 
     <!-- Bootstrap Bundle with Popper -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 
-<!-- jQuery -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-<!-- DataTables JavaScript -->
-<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
+    <!-- DataTables JavaScript -->
+    <script type="text/javascript" charset="utf8"
+        src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
 
-<!-- SweetAlert JS -->
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- SweetAlert JS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-<!-- Your custom JavaScript -->
-<script src="js.js"></script>
+    <!-- Your custom JavaScript -->
+    <script src="js.js"></script>
 </body>
 
 </html>

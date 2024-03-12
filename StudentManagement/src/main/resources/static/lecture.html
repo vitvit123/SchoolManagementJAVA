@@ -29,7 +29,10 @@
             </div> -->
             <div class="p-4 pt-5">
                 <img src="img/logo.png" width="40px">
-                <a href="" class="font-weight-bold" style="color:#fff;">Hello, Guest!</a>
+                <a href="" class="font-weight-bold" style="color:#fff;">Hello, <span id="lectureName"></span>!</a>
+                <img th:src="@{'/getLectureProfileImage/' + ${lectureId}}" id="lectureProfile" alt="profile">
+
+
                 <ul class="list-unstyled components mb-5">
                     <li>
                         <a href="#">
@@ -58,6 +61,8 @@
                             <span id="Request-Permission-Tab" class="link-name">Request Permission</span>
                         </a>
                     </li>
+
+
                 </ul>
 
 
@@ -81,7 +86,10 @@
                         <div class="col" style="display: flex;">
                             <span style="font-size: 20px;color: darkgrey;" class="admin-name">Lecture Name :</span>
                             <span style="font-size: 20px;" id="username"></span>
+                            <a href=""><i class="fas fa-bell"></i></a>
+
                         </div>
+
                     </div>
                 </div>
 
@@ -89,7 +97,7 @@
 
 
             <div style="display: none;" id="DashboardContain">
-                <h1>Helloworld Dashboatd</h1>
+                <h1>Helloworld Dashboard</h1>
             </div>
 
 
@@ -105,7 +113,39 @@
 
 
             <div style="display: none;" id="Request-Permission-Contain">
-                <h1>Helloworld Request Permission</h1>
+                <h1>Helloworld request permission</h1>
+                <div class="container mt-5">
+                    <h1 class="mb-4">Leave Request Form</h1>
+                    <form id="leaveRequestForm" action="/leave-request" method="post">
+                        <div class="form-group">
+                            <label for="lecturerId">Lecturer ID:</label>
+                            <input type="text" class="form-control" id="lecturerId" name="lecturerId" readonly>
+                        </div>
+                        
+                        
+                        <div class="form-group">
+                            <label for="courseId">Course ID:</label>
+                            <input type="text" class="form-control" id="courseId" name="courseId" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="classId">Class ID:</label>
+                            <input type="text" class="form-control" id="classId" name="classId" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="time">Time (HH:MM):</label>
+                            <input type="time" class="form-control" id="time" name="time" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="date">Date:</label>
+                            <input type="date" class="form-control" id="date" name="date" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="reason">Reason:</label>
+                            <textarea class="form-control" id="reason" name="reason" rows="4" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                </div>
             </div>
 
 

@@ -34,16 +34,15 @@ public class LeaveRequest {
     private boolean isCompleted;
 
     @ManyToOne
-    @JoinColumn(name = "ClassID") 
+    @JoinColumn(name = "ClassID")
     private Class myClass;
 
     @ManyToOne
-    @JoinColumn(name = "TimeID") 
+    @JoinColumn(name = "TimeID")
     private StudySchedule studyTime;
 
-    @Column(name = "ApproveID")
+    @Column(name = "ApproveID", columnDefinition = "CHAR(10)")
     private String approveId;
-
 
     public int getLeaveId() {
         return leaveId;
@@ -108,6 +107,7 @@ public class LeaveRequest {
     public void setDate(Date date) {
         this.date = date;
     }
+
     public String getReason() {
         return reason;
     }
