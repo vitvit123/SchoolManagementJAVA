@@ -29,7 +29,14 @@ $(document).ready(function () {
 
     $('#ClassTab').on('click', function () {
         CloseTab();
+<<<<<<< HEAD
         $("#Container-Fluid-Class").css("display", "block");
+=======
+        $("#Container-Fluid-Class").css("display","block");
+        $("#classList").css("display","none");
+        $(".addclasstext").css("display","none");
+        $("#addClassBtn").css("display","none");
+>>>>>>> d01b3ab6665a234c4bb509c292d2cc8cf822a7d1
     });
 
 
@@ -130,9 +137,15 @@ $(document).ready(function () {
 
 
                 // Loop through the courses and populate the select options
+<<<<<<< HEAD
                 response.forEach(function (course) {
+=======
+                response.forEach(function(course) {
+
+>>>>>>> d01b3ab6665a234c4bb509c292d2cc8cf822a7d1
                     var option = $('<option>', {
                         value: course.courseName, // Assuming 'courseName' is used as the value for the option
+                        course_id:course.id,
                         text: course.courseName // Using 'courseName' as the text for the option
                     });
                     $('#course').append(option);
@@ -225,9 +238,25 @@ $(document).ready(function () {
     fetchCourses();
 
 
+    $("#tabclasshave").on("click",()=>{
+        $("#classList").css("display","block");
+        $(".addclasstext").css("display","none");
+        $("#addClassBtn").css("display","none");
+    })
 
 
+<<<<<<< HEAD
     $("#addClassBtn").on("click", function () {
+=======
+    $("#addclasstab").on("click",()=>{
+        $("#classList").css("display","none");
+        $(".addclasstext").css("display","block");
+        $("#addClassBtn").css("display","block");
+
+    })
+
+    $("#addClassBtn").on("click",function(){
+>>>>>>> d01b3ab6665a234c4bb509c292d2cc8cf822a7d1
         $("#addClassModal").modal("show");
     });
 
@@ -266,6 +295,7 @@ $(document).ready(function () {
     function fetchClasses() {
         $.get("/classes", function (classes) {
             var classListDiv = $("#classList");
+<<<<<<< HEAD
             var classSelect = $("#classSelect"); // Select element to populate
 
             classListDiv.empty(); // Clear previous content
@@ -276,6 +306,17 @@ $(document).ready(function () {
 
             classes.forEach(function (classObj) {
                 // Create a box-like div for each class
+=======
+            var classSelect = $("#classSelect");
+    
+            classListDiv.empty(); 
+            classSelect.empty();
+    
+            // Add a default option
+            classSelect.append($('<option value="">-- Select Class --</option>'));
+    
+            classes.forEach(function(classObj) {
+>>>>>>> d01b3ab6665a234c4bb509c292d2cc8cf822a7d1
                 var classBox = $("<div class='class-box'></div>");
 
                 // Display class name
@@ -286,8 +327,7 @@ $(document).ready(function () {
                 var updateBtn = $("<button class='update-btn' data-id='" + classObj.classId + "'>Update</button>");
                 updateBtn.on("click", function () {
                     var classId = $(this).data("id");
-                    // Handle update functionality here with classId
-                    console.log("Update button clicked for class ID: " + classId);
+
                 });
                 classBox.append(updateBtn);
 
@@ -304,6 +344,7 @@ $(document).ready(function () {
 
                 // Populate the select element with class options
                 classSelect.append($('<option>', {
+                    class_id: classObj.classId,
                     value: classObj.classId, // Assuming 'classId' is used as the value for the option
                     text: classObj.className // Using 'className' as the text for the option
                 }));
@@ -359,9 +400,13 @@ $(document).ready(function () {
     });
 
 
+<<<<<<< HEAD
 
     // Event handler for clicking the "Update" button
     $(document).on("click", ".BtnCourseIDUpdate", function () {
+=======
+    $(document).on("click", ".BtnCourseIDUpdate", function() {
+>>>>>>> d01b3ab6665a234c4bb509c292d2cc8cf822a7d1
         var courseId = $(this).data("updateid"); // Get the course ID
         var currentCourseName = $(this).closest(".card-body").find(".card-title").text(); // Get the current course name
         $("#updateCourseModal").modal("show"); // Show the modal popup
@@ -847,14 +892,21 @@ $(document).ready(function () {
     function fetchStudySchedules() {
         $.ajax({
             type: "GET",
+<<<<<<< HEAD
             url: "/get-study-schedules",
             success: function (response) {
                 var timeSelect = $("#timeEnrollment");
+=======
+            url: "/get-study-schedules", 
+            success: function(response) {
+
+                var timeSelect = $("#timeEnrollment");                
+>>>>>>> d01b3ab6665a234c4bb509c292d2cc8cf822a7d1
                 timeSelect.empty();
                 response.forEach(function (item) {
                     var optionText = item.dayOfWeek + " - " + item.startTime + " to " + item.endTime;
                     var optionValue = item.time;
-                    timeSelect.append($('<option></option>').attr('value', optionValue).text(optionText));
+                    timeSelect.append($('<option></option>').attr('datatimeid',item.timeId).attr('value', optionValue).text(optionText));
                 });
 
                 displayStudySchedules(response);
@@ -981,6 +1033,26 @@ $(document).ready(function () {
     });
 
 
+<<<<<<< HEAD
+=======
+    $.ajax({
+        type: "GET",
+        url: `/lecturesBySkill/${selectedSubject}`,
+        success: function(response) {
+            $('#lecturerSelect').empty(); 
+            if (response.length > 0) {
+                response.forEach(function(lecture) {
+                    $('#lecturerSelect').append(`<option value="${lecture.lecturerId}">${lecture.fullname}</option>`);
+                });
+            } else {
+                $('#lecturerSelect').append(`<option value="">No lectures found for the selected skill</option>`);
+            }
+        },
+        error: function(xhr, status, error) {
+            alert("Failed to fetch lectures by skill.");
+        }
+    });
+>>>>>>> d01b3ab6665a234c4bb509c292d2cc8cf822a7d1
 
 
 
@@ -1024,6 +1096,50 @@ $(document).ready(function () {
         });
 
     });
+
+$("#btn-enrollment").on("click", (event) => {
+    event.preventDefault();
+    
+    const classId = $("#classSelect").val();
+    const startDate = $("#startDate").val();
+    const endDate = $("#endDate").val();
+    const courseId = $("#course option:selected").attr("course_id");
+    const timeId = $("#timeEnrollment option:selected").attr("datatimeid");
+    const studentId = $("#studentSelect").val();
+    const lecturerId = $("#lecturerSelect").val();
+
+    const enrollmentData = {
+        myClass: { classId: classId },
+        startDate: startDate,
+        endDate: endDate,
+        course: { course_id: courseId },
+        studyTime: { timeId: timeId },
+        student: { studentId: studentId },
+        lecturer: { lecturerId: lecturerId }
+    };
+
+    console.log(enrollmentData);
+
+    $.ajax({
+        url: '/enrollments',
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(enrollmentData),
+        success: function (response) {
+            console.log('Enrollment successful:', response);
+        },
+        error: function (xhr, status, error) {
+            console.error('Error occurred while enrolling:', xhr.responseText.trim());
+            // Extract error message from xhr object
+            var errorMessage = xhr.responseText.trim();
+            if (errorMessage === '') {
+                errorMessage = 'Unknown error occurred';
+            }
+            // Display error message to the user
+            alert('Error occurred while enrolling: ' + errorMessage);
+        }
+    });
+});
 
 
 

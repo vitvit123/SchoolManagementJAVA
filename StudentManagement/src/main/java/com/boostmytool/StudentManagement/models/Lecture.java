@@ -73,7 +73,6 @@ public class Lecture {
     // Modified setDob method to accept a String argument and parse it to Date
     public void setDob(String dobString) {
         try {
-            // Parse the string representation of the date to a Date object
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             this.dob = dateFormat.parse(dobString);
         } catch (ParseException e) {
