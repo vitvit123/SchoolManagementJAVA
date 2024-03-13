@@ -1,4 +1,11 @@
 $(document).ready(function () {
+
+  
+
+
+
+
+
     // Function to get lecture name from cookie
     function getCookie(name) {
         const value = `; ${document.cookie}`;
@@ -10,6 +17,7 @@ $(document).ready(function () {
     var lectureName = getCookie('lecture');
     $("#username").text(lectureName);
     $("#lectureName").text(lectureName);
+    $("#lecturerName").val(lectureName);
 
     // Retrieve lecture profile from cookie and display it
     var lectureProfile = getCookie('Profile');
@@ -61,10 +69,8 @@ $(document).ready(function () {
         closeAllTabs();
         $("#Request-Permission-Contain").css("display", "block");
 
-        
-        $.get("/lecture-id", function (data) {
-            $("#lecturerId").val(data);
-        });
+
+
     });
 
 

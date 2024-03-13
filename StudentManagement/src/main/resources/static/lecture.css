@@ -11839,7 +11839,7 @@ h5,
 #sidebar {
     min-width: 250px;
     max-width: 250px;
-    background: gray;
+    background: #1b4272;
     color: #000;
     -webkit-transition: all 0.3s;
     -o-transition: all 0.3s;
@@ -11943,14 +11943,14 @@ h5,
 
 
 #sidebar .custom-menu .btn.btn-primary {
-    background: grey;
-    border-color: darkgray;
+    background: #122133;
+    border-color: #1b4272;
 }
 
 #sidebar .custom-menu .btn.btn-primary:hover,
 #sidebar .custom-menu .btn.btn-primary:focus {
-    background: #6749b9 !important;
-    border-color: #6749b9 !important;
+    background: #1b4272 !important;
+    border-color: #1b4272 !important;
 }
 
 a[data-toggle="collapse"] {
@@ -12031,8 +12031,10 @@ a[data-toggle="collapse"] {
 .form-control:-moz-placeholder {
     /* Firefox 18- */
     color: rgba(0, 0, 0, 0.3);
-}   
+}
+
 .top-bar {
-    background-color: #eee;
+    background-color: #1b4272;
+    color:#fff !important;
     padding: 15px 0;
 }

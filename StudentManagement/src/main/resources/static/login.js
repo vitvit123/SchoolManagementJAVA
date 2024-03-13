@@ -1,14 +1,14 @@
-$(document).ready(function() {
-    
+$(document).ready(function () {
+
     function getCookie(name) {
         const value = `; ${document.cookie}`;
         const parts = value.split(`; ${name}=`);
         if (parts.length === 2) return parts.pop().split(';').shift();
-      }
-      var adminturn=(getCookie('admin'));
-      var lectureturn=(getCookie('lecture'));
-      var studentturn=(getCookie('student'));
-    
+    }
+    var adminturn = (getCookie('admin'));
+    var lectureturn = (getCookie('lecture'));
+    var studentturn = (getCookie('student'));
+
 
     function getCookies(value) {
         const cookies = document.cookie.split(';');
@@ -22,58 +22,55 @@ $(document).ready(function() {
         return null;
     }
     console.log(getCookies(adminturn));
-    if(getCookies(adminturn)==="admin")
-    {
+    if (getCookies(adminturn) === "admin") {
         window.location.href = "admin.html";
     }
-    if(getCookies(lectureturn)==="lecture")
-    {
+    if (getCookies(lectureturn) === "lecture") {
         window.location.href = "lecture.html";
     }
-    if(getCookies(studentturn)==="student")
-    {
+    if (getCookies(studentturn) === "student") {
         window.location.href = "student.html";
     }
-    
+
 
 
 
 
     $("#togglePasswordsee").on("click", () => {
         $("#password").attr("type", "text");
-        $("#togglePasswordclose").css("display","block");
-        $("#togglePasswordsee").css("display","none");
+        $("#togglePasswordclose").css("display", "block");
+        $("#togglePasswordsee").css("display", "none");
     });
-    $("#togglePasswordclose").on("click",()=>{
+    $("#togglePasswordclose").on("click", () => {
         $("#password").attr("type", "password");
-        $("#togglePasswordclose").css("display","none");
-        $("#togglePasswordsee").css("display","block");
+        $("#togglePasswordclose").css("display", "none");
+        $("#togglePasswordsee").css("display", "block");
     })
-    $("#loginForm").submit(function(event) {
-        event.preventDefault(); 
-    
+    $("#loginForm").submit(function (event) {
+        event.preventDefault();
+
         var formData = {
             username: $("#username").val(),
             password: $("#password").val()
         };
-    
+
         $.ajax({
             type: "POST",
             contentType: "application/json",
             url: "/login",
             data: JSON.stringify(formData),
-            success: function(data, textStatus, xhr) {
+            success: function (data, textStatus, xhr) {
                 if (data === "admin") {
-                    
-                    document.cookie = `admin=${formData.username}; path=/`; 
+
+                    document.cookie = `admin=${formData.username}; path=/`;
                     window.location.href = "admin.html";
                 } else if (data === "student") {
-                  
-                    document.cookie = `student=${formData.username}; path=/`; 
+
+                    document.cookie = `student=${formData.username}; path=/`;
                     window.location.href = "student.html";
                 } else if (data === "lecture") {
-                   
-                    document.cookie = `lecture=${formData.username}; path=/`; 
+
+                    document.cookie = `lecture=${formData.username}; path=/`;
                     window.location.href = "lecture.html";
                 } else {
                     console.error("Invalid user type");
@@ -82,10 +79,10 @@ $(document).ready(function() {
                         text: "Invalid user type",
                         icon: "error"
                     });
-                    return; 
-                }           
+                    return;
+                }
             },
-            error: function(xhr, status, error) {
+            error: function (xhr, status, error) {
                 console.error("Login failed. Error: " + xhr.responseText);
                 Swal.fire({
                     title: "Error!",
@@ -94,9 +91,9 @@ $(document).ready(function() {
                 });
             }
         });
-        
+
     });
-    
-    
+
+
 
 });
