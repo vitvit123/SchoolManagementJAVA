@@ -351,3 +351,16 @@ body {
 .delete-btn:hover {
     background-color: #0056b3;
 }
+#class-topbar ul li {
+    padding: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+#class-topbar ul li:hover {
+    background-color: #f0f0f0;
+}
+
+#class-topbar hr {
+    margin-top: 10px;
+}

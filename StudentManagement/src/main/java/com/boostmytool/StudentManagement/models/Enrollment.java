@@ -1,7 +1,15 @@
 package com.boostmytool.StudentManagement.models;
 
-import java.util.Date;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+
+
 
 @Entity
 @Table(name = "Enrollment")
@@ -25,7 +33,7 @@ public class Enrollment {
     private Student student;
 
     @ManyToOne
-    @JoinColumn(name = "CourseID")
+    @JoinColumn(name = "course_id")
     private Course course;
 
     @ManyToOne
@@ -33,10 +41,12 @@ public class Enrollment {
     private StudySchedule studyTime;
 
     @Column(name = "StartDate")
-    private Date startDate;
+    private String startDate;
 
     @Column(name = "EndDate")
-    private Date endDate;
+    private String endDate;
+
+    // Getters and setters
 
     public int getEnrollmentId() {
         return enrollmentId;
@@ -86,19 +96,19 @@ public class Enrollment {
         this.studyTime = studyTime;
     }
 
-    public Date getStartDate() {
+    public String getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(Date startDate) {
+    public void setStartDate(String startDate) {
         this.startDate = startDate;
     }
 
-    public Date getEndDate() {
+    public String getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(Date endDate) {
+    public void setEndDate(String endDate) {
         this.endDate = endDate;
     }
 }

@@ -131,7 +131,6 @@ public class StudentController {
         return studentRepository.findBySubject(subject);
     }
 
-
     @PutMapping("/updateStudent/{studentId}")
     public ResponseEntity<String> updateStudent(@PathVariable int studentId, @RequestBody Student updatedStudent) {
         try {

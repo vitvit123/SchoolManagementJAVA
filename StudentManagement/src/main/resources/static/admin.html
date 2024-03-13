@@ -238,7 +238,15 @@
 
 
         <div class="Class-content" style="display: none;" id="Container-Fluid-Class">
-            <h3>Add Class</h3>
+            <div  id="class-topbar">
+                <ul style="display: flex;">
+                    <li id="tabclasshave" ><i class="fas fa-chalkboard"></i> Class</li>
+                    <li id="addclasstab"><i  class="fas fa-plus"></i> Add Class</li>
+                </ul>
+                <hr style="background-color: darkgrey; max-width: 100%;">
+            </div>
+            
+            <h3 class="addclasstext">Add Class</h3>
             <button style="margin-bottom: 40px;" type="button" class="btn btn-primary" id="addClassBtn"
                 data-toggle="modal" data-target="#addClassModal">Add Class</button>
 
@@ -337,7 +345,7 @@
                             </div>
                             
                             
-                            <button type="submit" style="width: 120px;" class="btn btn-primary">Enroll</button>
+                            <button type="submit" id="btn-enrollment" style="width: 120px;" class="btn btn-primary">Enroll</button>
                         </form>
                     </div>
                 </div>
