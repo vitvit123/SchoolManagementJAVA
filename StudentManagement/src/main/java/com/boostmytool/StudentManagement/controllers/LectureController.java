@@ -174,9 +174,7 @@ public class LectureController {
                 existingLecture.setDob(updatedLecture.getDob());
                 existingLecture.setPassword(updatedLecture.getPassword());
                 existingLecture.setSkill(updatedLecture.getSkill());
-                // Update other fields as needed
 
-                // Save the updated lecture to the database
                 lectureRepository.save(existingLecture);
 
                 return ResponseEntity.ok("Lecture updated successfully");
@@ -188,5 +186,22 @@ public class LectureController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update lecture");
         }
     }
+
+
+
+    @GetMapping("/getLectureByFullname/{fullname}")
+    public ResponseEntity<Lecture> getLectureByFullname(@PathVariable String fullname) {
+        Optional<Lecture> lectureOptional = lectureRepository.findByFullname(fullname);
+        if (lectureOptional.isPresent()) {
+            Lecture lecture = lectureOptional.get();
+            return ResponseEntity.ok(lecture);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+    
+    
+    
+
 
 }

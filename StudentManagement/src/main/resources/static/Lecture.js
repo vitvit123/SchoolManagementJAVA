@@ -1,8 +1,5 @@
 $(document).ready(function () {
 
-  
-
-
 
 
 
@@ -19,9 +16,9 @@ $(document).ready(function () {
     $("#lectureName").text(lectureName);
     $("#lecturerName").val(lectureName);
 
-    // Retrieve lecture profile from cookie and display it
-    var lectureProfile = getCookie('Profile');
-    $("#lectureProfile").attr("src", "/img/lectures/" + lectureProfile);
+
+    // var lectureProfile = getCookie('Profile');
+    // $("#lectureProfile").attr("src", "/img/lectures/" + lectureProfile);
 
     // Handle logout button click
     $("#Logoutbotton").on("click", () => {
@@ -41,11 +38,15 @@ $(document).ready(function () {
         });
     });
 
-    // Function to close all tabs
-    function closeAllTabs() {
-        $("#DashboardContain, #Check-In-Contain, #Check-out-Contain, #Request-Permission-Contain").css("display", "none");
-    }
 
+    function closeAllTabs() {
+        $("#DashboardContain, #Check-In-Contain, #Check-out-Contain, #Request-Permission-Contain , #classcontain").css("display", "none");
+    }
+    
+    $('#ClassTab').on('click', function () {
+        closeAllTabs();
+        $("#classcontain").css("display", "block");
+    });
 
     $('#DashboardTab').on('click', function () {
         closeAllTabs();
@@ -74,5 +75,25 @@ $(document).ready(function () {
     });
 
 
+    function retrieveLectureProfileByUsername() {
+        var fullname = $("#username").text(); // Assuming you have an element with id "username" where you display the fullname
+        
+        $.ajax({
+            type: "GET",
+            url: "/getLectureByFullname/" + fullname,
+            success: function(response) {
+                $("#lectureProfile").attr("src", "/img/lectures/" + response.profile);
+            },
+            error: function(xhr, status, error) {
+                console.error("Error retrieving lecture profile:", error);
+                // Handle error, such as displaying an error message to the user
+            }
+        });
+    }
+    
+    // Call the function to retrieve the lecture profile by username
+    retrieveLectureProfileByUsername();
+    
+ 
 
 });

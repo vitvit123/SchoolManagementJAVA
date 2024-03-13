@@ -29,37 +29,46 @@
             </div>
             <div class="p-4 pt-5">
                 <img src="img/logo.png" width="40px">
-                <a href="" class="font-weight-bold" style="color:#fff;">Hello, <span id="lectureName"></span>!</a>
-                <img src="https://media.cnn.com/api/v1/images/stellar/prod/221208164147-argentina-lionel-messi.jpg?c=original" id="lectureProfile" alt="profile" >
+                <a href="StudentManagement/src/main/resources/static/img/lectures/bfoyb.jpg" class="font-weight-bold" style="color:#fff;">Hello, <span id="lectureName"></span>!</a>
+                <img width="40px" src="" id="lectureProfile" alt="profile" >
+
                 
 
 
                 <ul class="list-unstyled components mb-5">
                     <li>
-                        <a href="#">
+                        <a href="#" id="DashboardTab">
                             <i class="fas fa-tachometer-alt"></i>
-                            <span id="DashboardTab" class="link-name">Dashboard</span>
+                            <span  class="link-name">Dashboard</span>
                         </a>
                     </li>
 
                     <li>
-                        <a href="#">
+                        <a href="#" id="ClassTab">
+                            <i class="fas fa-chalkboard"></i>
+                            <span  class="link-name">Class</span>
+                        </a>
+                    </li>
+                    
+
+                    <li>
+                        <a href="#" id="Check-In-Tab">
                             <i class="fas fa-sign-in-alt"></i>
-                            <span id="Check-In-Tab" class="link-name">Check-In</span>
+                            <span  class="link-name">Check-In</span>
                         </a>
                     </li>
 
                     <li>
-                        <a href="#">
+                        <a href="#" id="Check-out-Tab">
                             <i class="fas fa-sign-out-alt"></i>
-                            <span id="Check-out-Tab" class="link-name">Check-Out</span>
+                            <span  class="link-name">Check-Out</span>
                         </a>
                     </li>
 
                     <li>
-                        <a href="#">
+                        <a href="#" id="Request-Permission-Tab">
                             <i class="fas fa-sign-out-alt"></i>
-                            <span id="Request-Permission-Tab" class="link-name">Request Permission</span>
+                            <span  class="link-name">Request Permission</span>
                         </a>
                     </li>
 
@@ -102,6 +111,11 @@
             </div>
 
 
+            <div style="display: none;" id="classcontain">
+                <h1>Helloworld Class</h1>
+            </div>
+
+
             <div style="display: none;" id="Check-In-Contain">
                 <h1>Helloworld Check in</h1>
             </div>
@@ -114,7 +128,6 @@
 
 
             <div style="display: none;" id="Request-Permission-Contain">
-                <img src="StudentManagement/src/main/resources/static/img/logo.png" alt="pfp-picture">
                 <div class="container mt-5">
                     <h1 class="mb-4">Leave Request Form</h1>
                     <form id="leaveRequestForm" action="/leave-request" method="post">
