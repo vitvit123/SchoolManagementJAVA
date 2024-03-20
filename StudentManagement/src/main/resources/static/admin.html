@@ -34,21 +34,25 @@
             <li id="EnrollmentTab"><a href="#"><i class="fas fa-user-plus"></i> Enrollment</a></li>
             <li id="LogoutTab"><a href="#"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
         </ul>
-        
     </div>
     <div class="content">
         <div class="top-bar">
             <div class="container">
-                <div class="row">
-                    <div class="col" style="display: flex;">
-                        <span style="color: darkgrey;" class="admin-name">Admin Name :</span>
-                        <span style="margin-top: -2px;font-size: 20px;" id="username"></span>
-                     
+                <div class="row" >
+                    <div class="col" style="display: flex;justify-content: space-between;">
+                        <div style="display: flex;">
+                            <span style="color: darkgrey;" class="admin-name">Admin Name :</span>
+                            <span style="margin-top: -2px;font-size: 20px;" id="username"></span>
+                        </div>
+                        <i id="notificationBell" class="fas fa-bell">
+                            <span class="notificationCount">5</span>
+                        </i>
                     </div>
+
                 </div>
             </div>
             <div class="scrolling-text">
-                <marquee behavior="scroll" direction="right" scrollamount="20" style="font-size: 25px;">
+                <marquee behavior="scroll" direction="right" scrollamount="10" style="font-size: 25px;">
                     Welcome to School Management System - Providing Education Excellence! Our system offers a
                     comprehensive suite of features including student enrollment, course management, teacher assignment,
                     attendance tracking, grade management, and much more. With our user-friendly interface and powerful
@@ -88,6 +92,9 @@
         </div>
 
 
+        <div id="NotificationTab" style="display: none;">
+            <h1></h1>
+        </div>
 
 
         <!-- StudentTab -->
@@ -239,7 +246,7 @@
 
         <div class="Class-content" style="display: none;" id="Container-Fluid-Class">
             <div  id="class-topbar">
-                <ul style="display: flex;">
+                <ul style="display: flex;list-style: none;">
                     <li id="tabclasshave" ><i class="fas fa-chalkboard"></i> Class</li>
                     <li id="addclasstab"><i  class="fas fa-plus"></i> Add Class</li>
                 </ul>

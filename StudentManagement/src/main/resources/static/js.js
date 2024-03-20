@@ -25,7 +25,14 @@ $(document).ready(function() {
         $("#Container-Fluid-Course").css("display","none");
         $("#Container-Fluid-Class").css("display","none");
         $("#timeScheduleModal").css("display","none");
+        $("#NotificationTab").css("display","none");
+
     }
+    
+    $('#notificationBell').on('click', function () {
+        CloseTab();
+        $("#NotificationTab").css("display", "block");
+    });
 
     $('#ClassTab').on('click', function() {
         CloseTab();
@@ -288,17 +295,14 @@ $(document).ready(function() {
             classListDiv.empty(); 
             classSelect.empty();
     
-            // Add a default option
             classSelect.append($('<option value="">-- Select Class --</option>'));
     
             classes.forEach(function(classObj) {
                 var classBox = $("<div class='class-box'></div>");
     
-                // Display class name
                 var className = $("<p>" + classObj.className + "</p>");
                 classBox.append(className);
     
-                // Add update button with data-id attribute
                 var updateBtn = $("<button class='update-btn' data-id='" + classObj.classId + "'>Update</button>");
                 updateBtn.on("click", function() {
                     var classId = $(this).data("id");
@@ -306,7 +310,6 @@ $(document).ready(function() {
                 });
                 classBox.append(updateBtn);
     
-                // Add delete button with data-id attribute
                 var deleteBtn = $("<button class='delete-btn' data-id='" + classObj.classId + "'>Delete</button>");
                 deleteBtn.on("click", function() {
                     var classId = $(this).data("id");
@@ -557,6 +560,86 @@ $(document).ready(function() {
         });
 
     });
+
+
+
+
+    function fetchpermission(){
+        $.ajax({
+            url: `/requestresultss`, 
+            type: 'GET',
+            success: function(response) {
+                console.log(response);
+                for (var i = 0; i < response.length; i++) {
+                    var notificationDiv = $('<div>').addClass('notification');
+
+                        var icon = $('<i>').addClass('fa-regular fa-pen-to-square');
+                    
+                        var message = $('<p>').text("You have committed a Leave Request");
+
+                        var fromDate = $('<p>').html("On: <span style='color: #C37C06;'>" + response[i].date + "</span>");
+
+                        var containtext = $('<div>').addClass('notification-content');
+
+                        var containt = $('<div>').addClass('notification-contain-icontext');
+
+                        containtext.append(message,fromDate);
+                        containt.append(icon,containtext)
+
+                        var button = $('<button>').text('View').addClass('view-button').attr('leaveID',response[i].leaveId);
+
+                        notificationDiv.append(containt,button);
+                  
+
+                        $("#NotificationTab").append(notificationDiv);
+                }
+
+
+                $(document).on("click", ".view-button", function() {
+                    alert("Hi");
+                    var leaveid = $(this).attr("leaveid");
+                    $('#Request-Permission-Tab').click();
+                    $(".textleave").text("Request Information");
+                    $("#backlist").css("display","block");
+                    $("#leavebtn").css("display","none");
+                    let filteredLectures = response.filter(function(lectures) {
+                        return lectures.leaveId == leaveid;
+                    });
+                    
+                    if(filteredLectures[0].isCompleted == '0'){
+                        $("#ResponseText").css({
+                            "display": "block",
+                            "color": "red"
+                        });
+                        $("#ResponseText").text("Your request was Rejected");
+                    }
+                    else if(filteredLectures[0].isCompleted=='1'){
+                        $("#ResponseText").css({
+                            "display": "block",
+                            "color": "green"
+                        });
+                        $("#ResponseText").text("Your request was Approved");
+                    }
+                    else{
+                        $("#ResponseText").css({
+                            "display": "block",
+                            "color": "darkgrey"
+                        });
+                        $("#ResponseText").text("Your request was Pending");
+                    }
+  
+
+                });
+                
+
+
+            },
+            error: function(xhr, status, error) {
+                console.error('Error:', xhr.status, xhr.statusText, error);
+            }
+        });
+    }
+    fetchpermission();
 
 
 

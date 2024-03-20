@@ -19,11 +19,17 @@
 </head>
 <body>
 
-    <div class="container LoginTemplate" id="Login_Form">
-        <div class="row">
-          <div class="col-md-6 offset-md-3 login-container">
-            <h2>Login</h2>
-            <form id="loginForm" class="login-form">
+    <div class="container LoginTemplate" style="margin-top: 2%;" id="Login_Form">
+        <div class="row" >
+          <div style="display: flex;width: 100%;" class="col-md-6 offset-md-3 login-container">
+            <!-- <h2>Login</h2> -->
+            <div style="width: 50%;display: flex;flex-direction: column;align-items: center;justify-content: center;">
+                <img class="rotate-image" style="width: 120px; height: auto;" src="/img/logo.png" alt="">
+                <h1>Institute</h1>
+                <h1>Of</h1>
+                <h1>Business</h1>
+            </div>
+            <form style="width: 50%;display: flex;flex-direction: column;justify-content: center;" id="loginForm" class="login-form">
                 <div class="form-group">
                     <label for="username">Username</label>
                     <input type="text" class="form-control" id="username" name="username" required>
@@ -32,9 +38,9 @@
                     <label for="password">Password</label>
                     <div class="inpnut-group" style="position: relative;">
                         <input type="password" class="form-control" id="password" name="password" required>
-                        <div style="position: absolute; right: -20px; top: 10px">
-                            <i id="togglePasswordsee" class="fas fa-eye"></i>
-                            <i id="togglePasswordclose" style="display: none;" class="fas fa-eye-slash"></i>
+                        <div style="position: absolute; right: 0px; top: 0px;">
+                            <i style="border: 1px solid darkgrey; padding: 10px;border-radius: 8px;" id="togglePasswordsee" class="fas fa-eye"></i>
+                            <i  id="togglePasswordclose" style="display: none;border: 1px solid darkgrey; padding: 10px;border-radius: 8px;" class="fas fa-eye-slash"></i>
                         </div>
                     </div>
                 </div>

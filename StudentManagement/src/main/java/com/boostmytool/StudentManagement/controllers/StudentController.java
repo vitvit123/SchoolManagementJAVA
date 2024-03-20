@@ -62,7 +62,7 @@ public class StudentController {
                 // Save the profile image to the specified directory
                 @SuppressWarnings("null")
                 String fileName = StringUtils.cleanPath(profile.getOriginalFilename());
-                Path uploadDir = Paths.get("StudentManagement/src/main/resources/static/img/students");
+                Path uploadDir = Paths.get("src/main/resources/static/img/students");
                 if (!Files.exists(uploadDir)) {
                     Files.createDirectories(uploadDir);
                 }
@@ -161,6 +161,11 @@ public class StudentController {
             e.printStackTrace(); // Log the exception for debugging
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update student");
         }
+    }
+
+    @GetMapping("/getAllstudent")
+    public List<Student> getAllstudent() {
+        return studentRepository.findAll();
     }
 
 }

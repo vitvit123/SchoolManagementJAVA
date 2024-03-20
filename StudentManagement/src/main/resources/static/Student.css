@@ -76,3 +76,30 @@ body {
         font-size: 0.85em;
     }
 }
+#notificationBell {
+    font-size: 25px; /* Set font size */
+    position: relative; /* Position relative for absolute positioning of the count */
+    cursor: pointer;
+    margin-top: 10px;
+}
+  
+
+  .notificationCount {
+    position: absolute; 
+    top: -8px;
+    right: -8px; 
+    width: 20px;
+    height: 20px; 
+    background-color: red; 
+    border-radius: 50%; 
+    color: white;
+    text-align: center;
+    font-size: 12px; 
+    line-height: 20px; 
+    
+  }
+  #leaveRequestForm{
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+    padding:15px;
+    border-radius:10px;
+  }

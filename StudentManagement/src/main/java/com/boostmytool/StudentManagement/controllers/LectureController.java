@@ -66,7 +66,7 @@ public class LectureController {
                 // Save the profile image to the specified directory
                 @SuppressWarnings("null")
                 String fileName = StringUtils.cleanPath(profile.getOriginalFilename());
-                Path uploadDir = Paths.get("StudentManagement/src/main/resources/static/img/lectures");
+                Path uploadDir = Paths.get("src/main/resources/static/img/lectures");
                 if (!Files.exists(uploadDir)) {
                     Files.createDirectories(uploadDir);
                 }
@@ -159,6 +159,16 @@ public class LectureController {
         } catch (Exception e) {
             e.printStackTrace(); // Log the exception for debugging
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update lecture");
+        }
+    }
+    @GetMapping("/getLectureByFullname/{fullname}")
+    public ResponseEntity<Lecture> getLectureByFullname(@PathVariable String fullname) {
+        Optional<Lecture> lectureOptional = lectureRepository.findByFullname(fullname);
+        if (lectureOptional.isPresent()) {
+            Lecture lecture = lectureOptional.get();
+            return ResponseEntity.ok(lecture);
+        } else {
+            return ResponseEntity.notFound().build();
         }
     }
 

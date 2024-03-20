@@ -1,5 +1,6 @@
 package com.boostmytool.StudentManagement.models;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -32,7 +33,7 @@ public class Enrollment {
     @JoinColumn(name = "StudentID")
     private Student student;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "course_id")
     private Course course;
 
@@ -111,4 +112,6 @@ public class Enrollment {
     public void setEndDate(String endDate) {
         this.endDate = endDate;
     }
+
+
 }

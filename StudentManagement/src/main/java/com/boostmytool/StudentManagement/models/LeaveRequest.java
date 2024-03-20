@@ -14,15 +14,15 @@ public class LeaveRequest {
 
     @ManyToOne
     @JoinColumn(name = "StudentID")
-    private Student student;
+    public Student student;
 
     @ManyToOne
     @JoinColumn(name = "LecturerID")
     private Lecture lecturer;
 
-    @ManyToOne
-    @JoinColumn(name = "CourseID")
-    private Course course;
+    @ManyToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name = "id")
+    public Course course;
 
     @Column(name = "Date")
     private Date date;
@@ -31,11 +31,48 @@ public class LeaveRequest {
     private String reason;
 
     @Column(name = "IsCompleted")
-    private boolean isCompleted;
+    public char isCompleted;
+
+    @ManyToOne
+    @JoinColumn(name = "ClassID")
+    private Class myClass;
+
+    @ManyToOne
+    @JoinColumn(name = "TimeID")
+    private StudySchedule studyTime;
+
+    @ManyToOne
+    @JoinColumn(name = "AdminID")
+    public Admin adminid; 
 
     public int getLeaveId() {
         return leaveId;
     }
+
+    public Class getMyClass() {
+        return myClass;
+    }
+
+    public void setMyClass(Class classId) {
+        this.myClass = classId;
+    }
+
+    public StudySchedule getStudyTime() {
+        return studyTime;
+    }
+
+    public void setStudyTime(StudySchedule timeid) {
+        this.studyTime = timeid;
+    }
+
+    public Admin getApprover() {
+        return adminid;
+    }
+    
+    public void setApprover(Admin approver) {
+        this.adminid = approver;
+    }
+    
 
     public void setLeaveId(int leaveId) {
         this.leaveId = leaveId;
@@ -45,24 +82,24 @@ public class LeaveRequest {
         return student;
     }
 
-    public void setStudent(Student student) {
-        this.student = student;
+    public void setStudent(Student studentid) {
+        this.student = studentid;
     }
 
-    public Lecture getLecturer() {
+    public Lecture getLecturer() {  
         return lecturer;
     }
 
-    public void setLecturer(Lecture lecturer) {
-        this.lecturer = lecturer;
+    public void setLecturer(Lecture lecturerid) {
+        this.lecturer = lecturerid;
     }
 
     public Course getCourse() {
         return course;
     }
 
-    public void setCourse(Course course) {
-        this.course = course;
+    public void setCourse(Course id) {
+        this.course = id;
     }
 
     public Date getDate() {
@@ -72,6 +109,7 @@ public class LeaveRequest {
     public void setDate(Date date) {
         this.date = date;
     }
+
     public String getReason() {
         return reason;
     }
@@ -80,11 +118,11 @@ public class LeaveRequest {
         this.reason = reason;
     }
 
-    public boolean isCompleted() {
+    public char isCompleted() {
         return isCompleted;
     }
 
-    public void setCompleted(boolean completed) {
+    public void setCompleted(char completed) {
         isCompleted = completed;
     }
 }

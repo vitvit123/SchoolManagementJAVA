@@ -142,7 +142,8 @@ body {
 }
 
 .login-container {
-    max-width: 400px;
+    max-width: 700px;
+    height: 400px;
     margin: 100px auto;
     background-color: #fff;
     border-radius: 10px;
@@ -364,3 +365,92 @@ body {
 #class-topbar hr {
     margin-top: 10px;
 }
+#notificationBell {
+    font-size: 25px; /* Set font size */
+    position: relative; /* Position relative for absolute positioning of the count */
+    cursor: pointer;
+
+}
+  
+
+  .notificationCount {
+    position: absolute; 
+    top: -8px;
+    right: -8px; 
+    width: 20px;
+    height: 20px; 
+    background-color: red; 
+    border-radius: 50%; 
+    color: white;
+    text-align: center;
+    font-size: 12px; 
+    line-height: 20px; 
+    
+  }
+
+  #NotificationTab{
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    padding: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+    margin-top: 40px;
+    border-radius: 15px;
+    max-height: 600px;
+    overflow-y: scroll;
+  }
+  #NotificationTab::-webkit-scrollbar {
+    display: none;
+}
+
+  .notification {
+
+    border: 1.7px solid #1E344F;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .notification p {
+    margin: 0;
+    color: #333;
+
+  }
+
+  .view-button {
+    background-color: transparent;
+    color: #1E344F;
+    border: 2px solid darkgrey;
+    border-radius: 3px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    width: 100px;
+    height: 30px;
+    margin-top: 10px;
+  }
+
+
+  .notification:hover .view-button{
+    background-color: #1E344F;
+    color: white;
+  }
+  .notification:hover{
+    border: 3.3px solid #1E344F;
+  }
+
+  .notification-content{
+    display: flex;
+    flex-direction: column;
+ 
+  }
+  .fa-right-from-bracket{
+    color: black;
+  }
+  .notification-contain-icontext{
+    display: flex;
+  }
+  .fa-pen-to-square{
+    font-size: 42px;
+  }

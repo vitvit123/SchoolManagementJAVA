@@ -5,44 +5,54 @@ import com.boostmytool.StudentManagement.models.StudySchedule;
 import com.boostmytool.StudentManagement.models.Course;
 import com.boostmytool.StudentManagement.repositories.EnrollmentRepository;
 import com.boostmytool.StudentManagement.repositories.CourseRepository;
+import com.boostmytool.StudentManagement.repositories.StudyScheduleRepository;
+
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import com.boostmytool.StudentManagement.repositories.StudyScheduleRepository; // Import StudyScheduleRepository
+
 
 @RestController
 @RequestMapping("/enrollments")
 public class EnrollmentController {
 
     private final EnrollmentRepository enrollmentRepository;
+    private final StudyScheduleRepository studyScheduleRepository;
     private final CourseRepository courseRepository;
-    private final StudyScheduleRepository studyScheduleRepository; // Add StudyScheduleRepository
 
-    public EnrollmentController(EnrollmentRepository enrollmentRepository, 
-                                 CourseRepository courseRepository,
-                                 StudyScheduleRepository studyScheduleRepository) { // Modify constructor
+
+    public EnrollmentController(EnrollmentRepository enrollmentRepository,
+                                 StudyScheduleRepository studyScheduleRepository,
+                                 CourseRepository courseRepository) {
         this.enrollmentRepository = enrollmentRepository;
+        this.studyScheduleRepository = studyScheduleRepository;
         this.courseRepository = courseRepository;
-        this.studyScheduleRepository = studyScheduleRepository; // Initialize StudyScheduleRepository
     }
 
     @SuppressWarnings("null")
     @PostMapping
     public ResponseEntity<String> createEnrollment(@RequestBody Enrollment enrollment) {
         try {
+            // Save study schedule
+            StudySchedule studyTime = enrollment.getStudyTime();
+            studyScheduleRepository.save(studyTime);
 
+            // Check if course is associated with enrollment
             Course course = enrollment.getCourse();
             if (course != null && course.getId() == null) {
-                courseRepository.save(course);
+                // If the course ID is null, save the course explicitly
+                course = courseRepository.save(course);
+                enrollment.setCourse(course);
             }
 
-            StudySchedule studyTime = enrollment.getStudyTime();
-                studyScheduleRepository.save(studyTime);
-            
-
+            // Save enrollment
             enrollmentRepository.save(enrollment);
 
             // Return a success response
@@ -56,4 +66,30 @@ public class EnrollmentController {
                     .body("Error occurred while creating enrollment: " + e.getMessage());
         }
     }
+
+
+    @GetMapping("/fetchrequestpermission/{lecturerId}")
+    public ResponseEntity<List<Enrollment>> getPermissionsByLecturerId(@PathVariable int lecturerId) {
+        List<Enrollment> enrollments = enrollmentRepository.findByLecturerLecturerId(lecturerId);
+        if (!enrollments.isEmpty()) {
+            return ResponseEntity.ok(enrollments);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+
+    // @GetMapping("/fetchrequestpermissionforstudent/{studentId}")
+    // public ResponseEntity<List<Enrollment>> getPermissionsByStudentID(@PathVariable int studentId){
+    //     List<Enrollment> enrollments = enrollmentRepository.findByStudentStudentID(studentId);
+    //         return ResponseEntity.ok(enrollments);
+    // }
+
+    
+    
+    
+
+    
+    
+    
 }
