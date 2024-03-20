@@ -638,6 +638,34 @@ $(document).ready(function() {
         for (var i = 0; i < responseData.length; i++) {
             if (responseData[i].leaveId == buttonattr) {
                     var d=responseData[i];
+        
+                    console.log(d.isCompleted);
+
+                    if(d.isCompleted=='1'){
+                        $("#btnApproveRequest").css("display","none");
+                        $("#btnRejectRequest").css("display","none");
+                        $("#ResponseText").css({
+                            "display": "block",
+                            "color": "green"
+                        });
+                        $("#ResponseText").text("Request was Approved");
+
+                    }
+                    else if(d.isCompleted=='0'){
+                        $("#btnApproveRequest").css("display","none");
+                        $("#btnRejectRequest").css("display","none");
+                        $("#ResponseText").css({
+                            "display": "block",
+                            "color": "red"
+                        });
+                        $("#ResponseText").text("Request was Rejected");
+                    }
+                    else {
+                       
+
+                    }
+
+
                     var dateString=d.date;
                     var convertdate=dateString.split("T")[0];
                     $("#date").val(convertdate);
@@ -673,6 +701,7 @@ $(document).ready(function() {
                     $("#time").append(optiontime);
 
 
+
             }
         }
 
@@ -685,10 +714,54 @@ $(document).ready(function() {
 
     $("#btnApproveRequest").on("click", function() {
         var leaveID = $(this).attr("approveleaveid");
-       
+        $.ajax({
+            url: "/approve-leave",
+            type: "POST",
+            data: {
+                leaveID: leaveID
+            },
+            success: function(response) {
+                Swal.fire(
+                    'Approved!',
+                    'Leave request has been approved.',
+                    'success'
+                );            },
+            error: function(xhr, status, error) {
+                // Handle error
+                alert("Error occurred while approving leave request: " + xhr.responseText);
+            }
+        });
     });
-    
 
+
+    
+    
+    $("#btnRejectRequest").on("click", function() {
+        var leaveID = $(this).attr("rejectleaveid");
+        $.ajax({
+            url: "/reject-leave",
+            type: "POST",
+            data: {
+                leaveID: leaveID
+            },
+            success: function(response) {
+                // Handle success
+                Swal.fire(
+                    'Rejected!',
+                    'Leave request has been rejected.',
+                    'success'
+                );
+            },
+            error: function(xhr, status, error) {
+                // Handle error
+                Swal.fire(
+                    'Error!',
+                    'An error occurred while rejecting leave request: ' + xhr.responseText,
+                    'error'
+                );
+            }
+        });
+    });
 
    
 
