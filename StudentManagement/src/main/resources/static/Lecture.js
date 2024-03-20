@@ -1,5 +1,6 @@
 $(document).ready(function () {
     
+    var responseData;
 
     function fetchLectureData() {
         $.ajax({
@@ -15,7 +16,7 @@ $(document).ready(function () {
                     lecturerId = lecture.lecturerId;
                     $("#lecturerName").attr("lectureid",lecturerId);
                     $("#username").attr("lectureid",lecturerId);
-
+                    
                     
                 $.ajax({
                     url: `/requestresultss`, 
@@ -23,6 +24,8 @@ $(document).ready(function () {
                     success: function(response) {
                         // response.reverse();
                         response.reverse();
+
+                        responseData = response;
                         console.log(response);
                         
                         for (var i = 0; i < response.length; i++) {
@@ -34,7 +37,7 @@ $(document).ready(function () {
                             
                                 var message = $('<p>').text("You have committed a Leave Request");
 
-                                var fromDate = $('<p>').html("On: <span style='color: #C37C06;'>" + response[i].date + "</span>");
+                                var fromDate = $('<p>').html("On: <span style='color: #C37C06;'>" + response[i].date.split("T")[0] + "</span>");
 
                                 var containtext = $('<div>').addClass('notification-content');
 
@@ -52,41 +55,9 @@ $(document).ready(function () {
                             }
                         }
 
+                        
 
-                        $(document).on("click", ".view-button", function() {
-                            var leaveid = $(this).attr("leaveid");
-                            $('#Request-Permission-Tab').click();
-                            $(".textleave").text("Request Information");
-                            $("#backlist").css("display","block");
-                            $("#leavebtn").css("display","none");
-                            let filteredLectures = response.filter(function(lectures) {
-                                return lectures.leaveId == leaveid;
-                            });
-                            
-                            if(filteredLectures[0].isCompleted == '0'){
-                                $("#ResponseText").css({
-                                    "display": "block",
-                                    "color": "red"
-                                });
-                                $("#ResponseText").text("Your request was Rejected");
-                            }
-                            else if(filteredLectures[0].isCompleted=='1'){
-                                $("#ResponseText").css({
-                                    "display": "block",
-                                    "color": "green"
-                                });
-                                $("#ResponseText").text("Your request was Approved");
-                            }
-                            else{
-                                $("#ResponseText").css({
-                                    "display": "block",
-                                    "color": "darkgrey"
-                                });
-                                $("#ResponseText").text("Your request was Pending");
-                            }
-          
-
-                        });
+                        
                         
 
 
@@ -154,6 +125,59 @@ $(document).ready(function () {
     }
     
     fetchLectureData();
+
+
+
+
+    $(document).on("click", ".view-button", function() {
+        $('#Request-Permission-Tab').click();
+        var buttonattr=$(this).attr("leaveid");
+        $(".textleave").text("Request Information");
+        $("#backlist").css("display","block");
+        $("#leavebtn").css("display","none");
+
+        for (var i = 0; i < responseData.length; i++) {
+            if (responseData[i].leaveId == buttonattr) {
+                    console.log(responseData[i].reason);
+                    var d=responseData[i];
+                    var dateString=d.date;
+                    var convertdate=dateString.split("T")[0];
+                    $("#date").val(convertdate);
+                    $("#reason").val(d.reason);
+                    $("#Approver").val(d.adminid.adminId);
+                    $("#classId").val(d.myClass.classId);
+                    $("#time").val(d.studyTime.timeId);
+
+
+
+                    if(d.isCompleted == '0'){
+                        $("#ResponseText").css({
+                            "display": "block",
+                            "color": "red"
+                        });
+                        $("#ResponseText").text("Your request was Rejected");
+                    }
+                    else if(d.isCompleted=='1'){
+                        $("#ResponseText").css({
+                            "display": "block",
+                            "color": "green"
+                        });
+                        $("#ResponseText").text("Your request was Approved");
+                    }
+                    else{
+                        $("#ResponseText").css({
+                            "display": "block",
+                            "color": "darkgrey"
+                        });
+                        $("#ResponseText").text("Your request was Pending");
+                    }
+
+            }
+        }
+
+    });
+
+
 
 
     function getCookie(name) {

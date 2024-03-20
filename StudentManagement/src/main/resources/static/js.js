@@ -26,6 +26,8 @@ $(document).ready(function() {
         $("#Container-Fluid-Class").css("display","none");
         $("#timeScheduleModal").css("display","none");
         $("#NotificationTab").css("display","none");
+        $("#Request-Permission-Contain").css("display", "none");
+
 
     }
     
@@ -561,23 +563,25 @@ $(document).ready(function() {
 
     });
 
-
-
+    var responseData;
 
     function fetchpermission(){
         $.ajax({
             url: `/requestresultss`, 
             type: 'GET',
             success: function(response) {
-                console.log(response);
+                response.reverse();
+                responseData = response;
                 for (var i = 0; i < response.length; i++) {
-                    var notificationDiv = $('<div>').addClass('notification');
+                    if (response[i].adminid.username === $("#username").text())
+                    {   
+                        var notificationDiv = $('<div>').addClass('notification');
 
                         var icon = $('<i>').addClass('fa-regular fa-pen-to-square');
                     
-                        var message = $('<p>').text("You have committed a Leave Request");
+                        var message = $('<p>').html('<strong>' + response[i].lecturer.fullname + '</strong> committed a Leave Request');
 
-                        var fromDate = $('<p>').html("On: <span style='color: #C37C06;'>" + response[i].date + "</span>");
+                        var fromDate = $('<p>').html("On: <span style='color: #C37C06;'>" + response[i].date.split("T")[0] + "</span>");
 
                         var containtext = $('<div>').addClass('notification-content');
 
@@ -589,48 +593,18 @@ $(document).ready(function() {
                         var button = $('<button>').text('View').addClass('view-button').attr('leaveID',response[i].leaveId);
 
                         notificationDiv.append(containt,button);
-                  
 
                         $("#NotificationTab").append(notificationDiv);
+                    }
+
+
+                    
+
                 }
 
 
-                $(document).on("click", ".view-button", function() {
-                    alert("Hi");
-                    var leaveid = $(this).attr("leaveid");
-                    $('#Request-Permission-Tab').click();
-                    $(".textleave").text("Request Information");
-                    $("#backlist").css("display","block");
-                    $("#leavebtn").css("display","none");
-                    let filteredLectures = response.filter(function(lectures) {
-                        return lectures.leaveId == leaveid;
-                    });
-                    
-                    if(filteredLectures[0].isCompleted == '0'){
-                        $("#ResponseText").css({
-                            "display": "block",
-                            "color": "red"
-                        });
-                        $("#ResponseText").text("Your request was Rejected");
-                    }
-                    else if(filteredLectures[0].isCompleted=='1'){
-                        $("#ResponseText").css({
-                            "display": "block",
-                            "color": "green"
-                        });
-                        $("#ResponseText").text("Your request was Approved");
-                    }
-                    else{
-                        $("#ResponseText").css({
-                            "display": "block",
-                            "color": "darkgrey"
-                        });
-                        $("#ResponseText").text("Your request was Pending");
-                    }
-  
-
-                });
                 
+
 
 
             },
@@ -642,6 +616,91 @@ $(document).ready(function() {
     fetchpermission();
 
 
+
+
+    $(document).on("click", ".view-button", function() {
+        
+        CloseTab();
+        $("#Request-Permission-Contain").css("display", "block");
+        $(".textleave").text("Leave Request Form");
+        $("#backlist").css("display","none");
+        $("#leavebtn").css("display","block");
+        $("#ResponseText").css("display","none");
+        $(".textleave").text("Request Information");
+        $("#backlist").css("display","block");
+        $("#leavebtn").css("display","none");
+        
+        var buttonattr=$(this).attr("leaveid");
+        $("#btnApproveRequest").attr("approveleaveid",buttonattr);
+        $("#btnRejectRequest").attr("rejectleaveid",buttonattr);
+
+
+        for (var i = 0; i < responseData.length; i++) {
+            if (responseData[i].leaveId == buttonattr) {
+                    var d=responseData[i];
+                    var dateString=d.date;
+                    var convertdate=dateString.split("T")[0];
+                    $("#date").val(convertdate);
+                    $("#lecturerName").val(d.lecturer.fullname);
+                    $("#reason").val(d.reason);
+                    $("#Approver").val(d.adminid.adminId);
+                    $("#classId").val(d.myClass.classId);
+                    $("#time").val(d.studyTime.timeId);
+
+
+                    var option = $('<option>', { 
+                        value:d.course.id,
+                        text: d.course.courseName
+                    });
+                    
+                    $("#courseId").append(option);
+
+
+                    var optionclass = $('<option>', { 
+                        value:d.myClass.classId,
+                        text: d.myClass.className
+                    });
+
+                    $("#classId").append(optionclass);
+
+
+
+                    var optiontime = $('<option>', { 
+                        value: d.studyTime.timeId,
+                        text: d.studyTime.dayOfWeek + " " + endTime + " " + startTime
+                    });
+
+                    $("#time").append(optiontime);
+
+
+            }
+        }
+
+
+    });
+
+
+
+
+
+    $("#btnApproveRequest").on("click", function() {
+        var leaveID = $(this).attr("approveleaveid");
+       
+    });
+    
+
+
+   
+
+
+
+
+    $("#backlist").on("click",()=>{
+        CloseTab();
+        $("#NotificationTab").css("display", "block");
+        $("#backlist").css("display","none");
+        $("#ResponseText").css("display","none")
+    })
 
 
     fetchStudent();
