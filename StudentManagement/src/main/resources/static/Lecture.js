@@ -103,10 +103,10 @@ $(document).ready(function () {
                                 cardHtml += '<img src="img/students/' + entry.student.profile + '" class="card-img-top" alt="Student Image">';                                cardHtml += '<div class="card-body">';
                                 cardHtml += '<h5 class="card-title">' + entry.student.fullname + '</h5>';
                                 cardHtml += '<p class="card-text">Student ID: ' + entry.student.studentId + '</p>';
-                                cardHtml += '<div>';
-                                cardHtml += '<button  data-student-id="' + entry.student.studentId + '"  class="btn btn-warning permissionpermission">Permission</button>';
-                                cardHtml += '<button  data-student-id="' + entry.student.studentId + '" style="margin-left: 10px;" class="btn btn-danger rejectpermission">Reject</button>';
-                                cardHtml += '<button  data-student-id="' + entry.student.studentId + '" style="margin-left: 10px;" class="btn btn-success approvepermission">Approve</button>';
+                                cardHtml += '<div id="managebtnpermission">';
+                                cardHtml += '<button subject="'+entry.course.id+'" data-student-id="' + entry.student.studentId + '"  class="btn btn-warning permissionpermission">Permission</button>';
+                                cardHtml += '<button subject="'+entry.course.id+'" data-student-id="' + entry.student.studentId + '" style="margin-left: 10px;" class="btn btn-danger rejectpermission">Reject</button>';
+                                cardHtml += '<button subject="'+entry.course.id+'"  data-student-id="' + entry.student.studentId + '" style="margin-left: 10px;" class="btn btn-success approvepermission">Approve</button>';
                                 cardHtml += '</div>';
                                 cardHtml += '</div>';
                                 cardHtml += '</div>';
@@ -199,8 +199,91 @@ $(document).ready(function () {
 
 
     $(document).on("click", ".approvepermission", function() {
-        var studentID=$(this).attr("data-student-id");
-    })
+        
+
+        var studentID = $(this).attr("data-student-id");
+        var subject = $(this).attr("subject");
+        
+        $.ajax({
+            type: "POST",
+            url: "approvepermission",
+            data: {
+                studentId: studentID,
+                subject: subject
+            },
+            success: function(response) {
+               console.log(response);
+            },
+            error: function(xhr, status, error) {
+                Swal.fire({
+                    title: "Success!",
+                    text: "Permission has been approve successfully!",
+                    icon: "success"
+                }).then(function(){
+                    $("#managebtnpermission").css("display", "none");
+                    
+                    setTimeout(function() {
+                    $("#managebtnpermission").css("display", "block");
+
+                    }, 0.1 * 60 * 1000);                    
+                })
+            }
+        });
+    });
+
+
+    $(document).on("click", ".rejectpermission", function() {
+        var studentID = $(this).attr("data-student-id");
+        var subject = $(this).attr("subject");
+        
+        $.ajax({
+            type: "POST",
+            url: "rejectpermission",
+            data: {
+                studentId: studentID,
+                subject: subject
+            },
+            success: function(response) {
+                Swal.fire({
+                    title: "Success!",
+                    text: "Reject Permission",
+                    icon: "error"
+                })
+            },
+            error: function(xhr, status, error) {
+                alert("reject");
+            }
+        });
+    });
+
+
+    $(document).on("click", ".permissionpermission", function() {
+        var studentID = $(this).attr("data-student-id");
+        var subject = $(this).attr("subject");
+        
+        $.ajax({
+            type: "POST",
+            url: "permissionpermission",
+            data: {
+                studentId: studentID,
+                subject: subject
+            },
+            success: function(response) {
+                Swal.fire({
+                    title: "Success!",
+                    text: "Permission",
+                    icon: "warning"
+                })
+            },
+            error: function(xhr, status, error) {
+                // Handle error response if needed
+            }
+        });
+    });
+
+
+    
+    
 
     $(document).on("click", ".view-button", function() {
         $('#Request-Permission-Tab').click();
