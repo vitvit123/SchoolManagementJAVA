@@ -395,7 +395,7 @@ body {
     margin: 0 auto;
     margin-top: 40px;
     border-radius: 15px;
-    max-height: 600px;
+    max-height: 500px;
     overflow-y: scroll;
   }
   #NotificationTab::-webkit-scrollbar {

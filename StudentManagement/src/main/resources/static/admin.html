@@ -30,7 +30,7 @@
             <li id="StudentTab"><a href="#"><i class="fas fa-user-graduate"></i> Students</a></li>
             <li id="CoursesTab"><a href="#"><i class="fas fa-book"></i> Courses</a></li>
             <li id="ClassTab"><a href="#"><i class="fas fa-chalkboard"></i> Class</a></li>
-            <li id="ScheduleTab"><a href="#"><i class="far fa-clock"></i> Time Schedule</a></li>
+            <li id="AuthorizedList1"><a href="#"><i class="fa fa-list-alt" aria-hidden="true"></i> Authorized List <span id="completedTaskCount"></span></a></li>            <li id="ScheduleTab"><a href="#"><i class="far fa-clock"></i> Time Schedule</a></li>
             <li id="TeachersTab"><a href="#"><i class="fas fa-chalkboard-teacher"></i> Teachers</a></li>
             <li id="EnrollmentTab"><a href="#"><i class="fas fa-user-plus"></i> Enrollment</a></li>
             <li id="LogoutTab"><a href="#"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
@@ -46,7 +46,7 @@
                             <span style="margin-top: -2px;font-size: 20px;" id="username"></span>
                         </div>
                         <i id="notificationBell" class="fas fa-bell">
-                            <span class="notificationCount">5</span>
+                            <span class="notificationCount"></span>
                         </i>
                     </div>
 
@@ -92,9 +92,12 @@
             </div>
         </div>
 
+        <div id="AuthorizedTab" class="container mt-5">
 
+        </div>
         <div id="NotificationTab" style="display: none;">
             <h1></h1>
+
         </div>
 
 
@@ -410,6 +413,7 @@
         <!-- Lecturer -->
 
         <!-- Lectures Content -->
+
         <div class="lectures-content" id="Container-Fluid-Lecture">
             <h3>Lectures</h3>
             <button type="button" style="margin-bottom: 5%;" class="btn btn-primary" id="addLectureBtn"

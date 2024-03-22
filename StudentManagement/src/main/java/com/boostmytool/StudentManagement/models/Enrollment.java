@@ -47,6 +47,7 @@ public class Enrollment {
     @Column(name = "EndDate")
     private String endDate;
 
+
     // Getters and setters
 
     public int getEnrollmentId() {

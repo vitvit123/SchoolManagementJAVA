@@ -36,36 +36,30 @@ public class EnrollmentController {
         this.courseRepository = courseRepository;
     }
 
-    @SuppressWarnings("null")
+
     @PostMapping
     public ResponseEntity<String> createEnrollment(@RequestBody Enrollment enrollment) {
         try {
-            // Save study schedule
             StudySchedule studyTime = enrollment.getStudyTime();
             studyScheduleRepository.save(studyTime);
 
-            // Check if course is associated with enrollment
             Course course = enrollment.getCourse();
             if (course != null && course.getId() == null) {
-                // If the course ID is null, save the course explicitly
                 course = courseRepository.save(course);
                 enrollment.setCourse(course);
             }
-
-            // Save enrollment
             enrollmentRepository.save(enrollment);
 
-            // Return a success response
             return ResponseEntity.ok("Enrollment created successfully");
         } catch (Exception e) {
-            // Log the exception for debugging
             e.printStackTrace();
 
-            // Return an error response
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Error occurred while creating enrollment: " + e.getMessage());
         }
     }
+
+
 
 
     @GetMapping("/fetchrequestpermission/{lecturerId}")

@@ -53,19 +53,19 @@
                     </li>
                     
 
-                    <li>
+                   <!-- <li>
                         <a href="#" id="Check-In-Tab">
                             <i class="fas fa-sign-in-alt"></i>
                             <span  class="link-name">Check-In</span>
                         </a>
-                    </li>
+                    </li> -->
 
                     <li>
                         <a href="#" id="Check-out-Tab">
                             <i class="fas fa-sign-out-alt"></i>
-                            <span  class="link-name">Check-Out</span>
+                            <span  class="link-name">Permission</span>
                         </a>
-                    </li>
+                    </li> 
 
                     <li>
                         <a href="#" id="Request-Permission-Tab">
@@ -102,7 +102,7 @@
                             </div>
 
                             <i id="notificationBell" class="fas fa-bell">
-                                <span class="notificationCount">5</span>
+                                <span class="notificationCount"></span>
                               </i>
 
 
@@ -120,21 +120,37 @@
 
 
             <div style="display: none;" id="classcontain">
-                <h1>Helloworld Class</h1>
+                <h2><span id="classname"></span></h2>
+                <h2>Subject : <span id="Majorname"></span></h2>
+
+    <table class="table" id="dataTable">
+      <thead>
+        <tr>
+          <th>Student Name</th>
+          <th>Start Date</th>
+          <th>End Date</th>
+          <th>Study Time</th>
+        </tr>
+      </thead>
+      <tbody id="enrollmentTableBody">
+        <!-- Table body will be populated dynamically -->
+      </tbody>
+    </table>
             </div>
 
 
-            <div style="display: none;" id="Check-In-Contain">
+            <!-- <div style="display: none;" id="Check-In-Contain">
                 <h1>Helloworld Check in</h1>
-            </div>
+            </div>-->
 
 
 
-            <div style="display: none;" id="Check-out-Contain">
-                <h1>Helloworld Check out</h1>
-            </div>
+            <div style="display: none;padding: 5% 10%;max-height: 800px;overflow-y: auto;" id="Check-out-Contain">
 
-            <div id="NotificationTab">
+            </div> 
+
+
+            <div style="display: none;" id="NotificationTab">
                 
                 <h1 style="color: #C37C06;">NotificationTab</h1>
                 

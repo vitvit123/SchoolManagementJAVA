@@ -1,4 +1,15 @@
 $(document).ready(function () {
+
+
+    var classfetch;
+    function fetchClasses() {
+        $.get("/classes", function(classes) {
+            classfetch=classes;
+            console.log(classes);
+            
+        });
+    }
+    fetchClasses();
     
     var responseData;
 
@@ -11,11 +22,17 @@ $(document).ready(function () {
             var username = $("#username").text();
             var lecturerId;
         
+  
             lectures.forEach(function(lecture) {
                 if (lecture.fullname === username) {
+                    console.log(lecture);
+                    console.log(classfetch);
+
+
                     lecturerId = lecture.lecturerId;
                     $("#lecturerName").attr("lectureid",lecturerId);
                     $("#username").attr("lectureid",lecturerId);
+
                     
                     
                 $.ajax({
@@ -24,12 +41,12 @@ $(document).ready(function () {
                     success: function(response) {
                         // response.reverse();
                         response.reverse();
-
-                        responseData = response;
                         console.log(response);
+                        responseData = response;
                         
                         for (var i = 0; i < response.length; i++) {
                             if (response[i].lecturer.lecturerId === lecturerId) {
+                                
                                
                                 var notificationDiv = $('<div>').addClass('notification');
 
@@ -52,14 +69,14 @@ $(document).ready(function () {
                           
 
                                 $("#NotificationTab").append(notificationDiv);
+                                
+
                             }
+                            
+
+                            
                         }
-
-                        
-
-                        
-                        
-
+                       
 
                     },
                     error: function(xhr, status, error) {
@@ -72,8 +89,62 @@ $(document).ready(function () {
                         url: `/enrollments/fetchrequestpermission/${lecturerId}`, // Updated endpoint
                         type: "GET",
                         success: function(response) {
+                            var cardContainer = $('#Check-out-Contain');
+
+                            var cardCount = 0;
+                    
+                            response.forEach(function(entry) {
+                                if (cardCount % 3 === 0) {
+                                    cardContainer.append('<div class="row"></div>');
+                                }
+                
+                                var cardHtml = '<div class="col-md-4 mb-3">';
+                                cardHtml += '<div class="card">';
+                                cardHtml += '<img src="img/students/' + entry.student.profile + '" class="card-img-top" alt="Student Image">';                                cardHtml += '<div class="card-body">';
+                                cardHtml += '<h5 class="card-title">' + entry.student.fullname + '</h5>';
+                                cardHtml += '<p class="card-text">Student ID: ' + entry.student.studentId + '</p>';
+                                cardHtml += '<div>';
+                                cardHtml += '<button  data-student-id="' + entry.student.studentId + '"  class="btn btn-warning permissionpermission">Permission</button>';
+                                cardHtml += '<button  data-student-id="' + entry.student.studentId + '" style="margin-left: 10px;" class="btn btn-danger rejectpermission">Reject</button>';
+                                cardHtml += '<button  data-student-id="' + entry.student.studentId + '" style="margin-left: 10px;" class="btn btn-success approvepermission">Approve</button>';
+                                cardHtml += '</div>';
+                                cardHtml += '</div>';
+                                cardHtml += '</div>';
+                                cardHtml += '</div>';
+                    
+                                cardContainer.find('.row').last().append(cardHtml);
+
+                                cardCount++;
+                            });
+                            cardContainer.show();
+
+
+                            $("#classname").text(response[0].myClass.className);
+                            $("#Majorname").text(response[0].course.courseName);
+
+                            
+                            var html = '';
+                            response.forEach(function(entry) {
+
+                                html += '<tr>';
+                                html += '<td>' + entry.student.fullname + '</td>';
+                                html += '<td>' + entry.startDate + '</td>';
+                                html += '<td>' + entry.endDate + '</td>';
+                                html += '<td>' + entry.studyTime.dayOfWeek + ' ' + entry.studyTime.startTime + ' - ' + entry.studyTime.endTime + '</td>';
+                                html += '</tr>';
+                            });
+                            $('#enrollmentTableBody').html(html); 
+                            $('#enrollmentTable').DataTable({
+                                "paging": true, 
+                                "searching": true 
+                            });
+
+
+
                             if (response.length > 0) {
+                                console.log(response);
                                 var course = response[0].course;
+                                console.log(course);
                                 var classs = response[0].myClass;
                                 var time = response[0].studyTime;
                                 
@@ -127,7 +198,9 @@ $(document).ready(function () {
     fetchLectureData();
 
 
-
+    $(document).on("click", ".approvepermission", function() {
+        var studentID=$(this).attr("data-student-id");
+    })
 
     $(document).on("click", ".view-button", function() {
         $('#Request-Permission-Tab').click();
@@ -169,7 +242,7 @@ $(document).ready(function () {
                             "display": "block",
                             "color": "darkgrey"
                         });
-                        $("#ResponseText").text("Your request was Pending");
+                        $("#ResponseText").text("Your request is Pending");
                     }
 
             }
@@ -294,7 +367,6 @@ $(document).ready(function () {
             reason: reason,
             approver: {adminId: adminId}
         };
-
 
         Swal.fire({
             title: 'Are you sure?',

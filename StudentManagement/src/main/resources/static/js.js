@@ -27,6 +27,8 @@ $(document).ready(function() {
         $("#timeScheduleModal").css("display","none");
         $("#NotificationTab").css("display","none");
         $("#Request-Permission-Contain").css("display", "none");
+        $("#NotificationTab").css("display", "none");
+        $("#AuthorizedTab").css("display","none");
 
 
     }
@@ -35,6 +37,10 @@ $(document).ready(function() {
         CloseTab();
         $("#NotificationTab").css("display", "block");
     });
+
+
+
+
 
     $('#ClassTab').on('click', function() {
         CloseTab();
@@ -291,6 +297,7 @@ $(document).ready(function() {
 
     function fetchClasses() {
         $.get("/classes", function(classes) {
+            console.log(classes);
             var classListDiv = $("#classList");
             var classSelect = $("#classSelect");
     
@@ -572,6 +579,7 @@ $(document).ready(function() {
             success: function(response) {
                 response.reverse();
                 responseData = response;
+                $(".notificationCount").text(response.length);
                 for (var i = 0; i < response.length; i++) {
                     if (response[i].adminid.username === $("#username").text())
                     {   
@@ -616,7 +624,44 @@ $(document).ready(function() {
     fetchpermission();
 
 
-
+    $("#AuthorizedList1").on("click", () => {
+        CloseTab();
+        $("#AuthorizedTab").css("display", "block");
+        let tableContent = '<div id="permissiontable" class="table-responsive"><table class="table table-striped" id="dataTable"><thead><tr><th>Leave ID</th><th>Lecturer</th><th>Course</th><th>Date</th><th>Action</th></tr></thead><tbody>';
+        for (var i = 0; i < responseData.length; i++) {
+            if (responseData[i].isCompleted == 1) {
+                let row = responseData[i];
+                tableContent += '<tr>';
+                tableContent += '<td>' + row.leaveId + '</td>';
+                tableContent += '<td>' + row.lecturer.fullname + '</td>';
+                tableContent += '<td>' + row.course.courseName + '</td>';
+                tableContent += '<td>' + (row.date ? new Date(row.date).toLocaleDateString() : '') + '</td>';
+                tableContent += '<td><button class="btn btn-primary view-button" leaveid="' + row.leaveId + '">View</button></td>';
+                tableContent += '</tr>';
+            }
+        }
+        tableContent += '</tbody></table></div>';
+    
+        // Append the table to the AuthorizedTab div
+        document.getElementById('AuthorizedTab').innerHTML = tableContent;
+    
+        // Initialize DataTable with searching option
+        $('#dataTable').DataTable({
+            searching: true
+        });
+    
+        // Adding event listeners to buttons
+        const viewButtons = document.querySelectorAll('.view-btn');
+        viewButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                // Implement your action when the button is clicked
+                const leaveId = button.getAttribute('data-leave-id');
+                viewDetails(leaveId);
+            });
+        });
+    });
+    
+    
 
     $(document).on("click", ".view-button", function() {
         
@@ -636,6 +681,7 @@ $(document).ready(function() {
 
 
         for (var i = 0; i < responseData.length; i++) {
+
             if (responseData[i].leaveId == buttonattr) {
                     var d=responseData[i];
         
@@ -664,7 +710,6 @@ $(document).ready(function() {
                        
 
                     }
-
 
                     var dateString=d.date;
                     var convertdate=dateString.split("T")[0];
@@ -1263,7 +1308,7 @@ $("#btn-enrollment").on("click", (event) => {
         myClass: { classId: classId },
         startDate: startDate,
         endDate: endDate,
-        course: { course_id: courseId },
+        course: { id: courseId },
         studyTime: { timeId: timeId },
         student: { studentId: studentId },
         lecturer: { lecturerId: lecturerId }
@@ -1277,7 +1322,11 @@ $("#btn-enrollment").on("click", (event) => {
         contentType: 'application/json',
         data: JSON.stringify(enrollmentData),
         success: function (response) {
-            console.log('Enrollment successful:', response);
+            Swal.fire({
+                title: "Success!",
+                text: "Enrollment Sucessful!",
+                icon: "success"
+            })
         },
         error: function (xhr, status, error) {
             console.error('Error occurred while enrolling:', xhr.responseText.trim());
@@ -1291,6 +1340,7 @@ $("#btn-enrollment").on("click", (event) => {
         }
     });
 });
+
 
 
 
