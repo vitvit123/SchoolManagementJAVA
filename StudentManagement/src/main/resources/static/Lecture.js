@@ -30,11 +30,12 @@ $(document).ready(function () {
 
 
                     lecturerId = lecture.lecturerId;
+                    
                     $("#lecturerName").attr("lectureid",lecturerId);
                     $("#username").attr("lectureid",lecturerId);
 
                     
-                    
+
                 $.ajax({
                     url: `/requestresultss`, 
                     type: 'GET',
@@ -46,8 +47,8 @@ $(document).ready(function () {
                         
                         for (var i = 0; i < response.length; i++) {
                             if (response[i].lecturer.lecturerId === lecturerId) {
-                                
-                               
+                            
+                
                                 var notificationDiv = $('<div>').addClass('notification');
 
                                 var icon = $('<i>').addClass('fa-regular fa-pen-to-square');
@@ -71,42 +72,50 @@ $(document).ready(function () {
                                 $("#NotificationTab").append(notificationDiv);
                                 
 
-                            }
-                            
-
-                            
+                            } 
                         }
-                       
-
                     },
                     error: function(xhr, status, error) {
                         console.error('Error:', xhr.status, xhr.statusText, error);
                     }
                 });
                     
-
+                var responsescore;
+                $.ajax({
+                    type: "GET",
+                    url: "/retrievescores",
+                    contentType: "application/json",
+                    success: function(response) {
+                        responsescore=response.reverse();
+        
+                    },
+                });
+                    console.log(lecturerId);
                     $.ajax({
-                        url: `/enrollments/fetchrequestpermission/${lecturerId}`, // Updated endpoint
+                        url: `/enrollments/fetchrequestpermission/${lecturerId}`, 
                         type: "GET",
                         success: function(response) {
+                            
                             var cardContainer = $('#Check-out-Contain');
-
+                            
                             var cardCount = 0;
-                    
+                            
+                            
                             response.forEach(function(entry) {
                                 if (cardCount % 3 === 0) {
                                     cardContainer.append('<div class="row"></div>');
                                 }
                 
-                                var cardHtml = '<div class="col-md-4 mb-3">';
+                                var cardHtml = '<div class="col-md-4 mb-3" style="width: 100%;">';
                                 cardHtml += '<div class="card">';
-                                cardHtml += '<img src="img/students/' + entry.student.profile + '" class="card-img-top" alt="Student Image">';                                cardHtml += '<div class="card-body">';
+                                cardHtml += '<img src="img/students/' + entry.student.profile + '" class="card-img-top" alt="Student Image">';                                
+                                cardHtml += '<div class="card-body">';
                                 cardHtml += '<h5 class="card-title">' + entry.student.fullname + '</h5>';
                                 cardHtml += '<p class="card-text">Student ID: ' + entry.student.studentId + '</p>';
-                                cardHtml += '<div id="managebtnpermission">';
-                                cardHtml += '<button subject="'+entry.course.id+'" data-student-id="' + entry.student.studentId + '"  class="btn btn-warning permissionpermission">Permission</button>';
-                                cardHtml += '<button subject="'+entry.course.id+'" data-student-id="' + entry.student.studentId + '" style="margin-left: 10px;" class="btn btn-danger rejectpermission">Reject</button>';
-                                cardHtml += '<button subject="'+entry.course.id+'"  data-student-id="' + entry.student.studentId + '" style="margin-left: 10px;" class="btn btn-success approvepermission">Approve</button>';
+                                cardHtml += '<div id="managebtnpermission" style="display: flex;">';
+                                cardHtml += '<button style="width: 30%;height:40px" subject="'+entry.course.id+'" data-student-id="' + entry.student.studentId + '"  class="btn btn-warning permissionpermission"><i class="fa fa-wheelchair-alt" aria-hidden="true"></i></button>';
+                                cardHtml += '<button style="width: 30%;margin-left:10px;" subject="'+entry.course.id+'" data-student-id="' + entry.student.studentId + '" style="margin-left: 10px;" class="btn btn-danger rejectpermission"><i class="fa fa-times-circle" aria-hidden="true"></i></button>';
+                                cardHtml += '<button style="width: 30%;margin-left:10px;" subject="'+entry.course.id+'"  data-student-id="' + entry.student.studentId + '" style="margin-left: 10px;" class="btn btn-success approvepermission"><i class="fa fa-check-circle" aria-hidden="true"></i></button>';
                                 cardHtml += '</div>';
                                 cardHtml += '</div>';
                                 cardHtml += '</div>';
@@ -115,6 +124,8 @@ $(document).ready(function () {
                                 cardContainer.find('.row').last().append(cardHtml);
 
                                 cardCount++;
+    
+                                
                             });
                             cardContainer.show();
 
@@ -122,22 +133,91 @@ $(document).ready(function () {
                             $("#classname").text(response[0].myClass.className);
                             $("#Majorname").text(response[0].course.courseName);
 
+                            console.log(responsescore);
+
                             
+
                             var html = '';
                             response.forEach(function(entry) {
+                      
 
                                 html += '<tr>';
                                 html += '<td>' + entry.student.fullname + '</td>';
                                 html += '<td>' + entry.startDate + '</td>';
                                 html += '<td>' + entry.endDate + '</td>';
                                 html += '<td>' + entry.studyTime.dayOfWeek + ' ' + entry.studyTime.startTime + ' - ' + entry.studyTime.endTime + '</td>';
-                                html += '</tr>';
+
+                                var ddata;
+                                var midTermFound = 0;
+                                var quizTotal = 0;
+                                var final=0;
+                                var midtermScore = 0; 
+                                var quizScore = 0; 
+                                var total;
+                                
+                                for (var i = 0; i < responsescore.length; i++) {
+                                    if (responsescore[i].student.fullname == entry.student.fullname) {
+                                        ddata = responsescore[i];
+                                        if (ddata && ddata.midTerm !== undefined) {
+                                            html += '<td>' + ddata.midTerm + '</td>';
+                                            midTermFound =  ddata.midTerm;
+                                        }
+                                        if (ddata && ddata.quiz !== undefined) {
+                                            html += '<td>' + ddata.quiz + '</td>';
+                                            quizTotal = ddata.quiz; 
+                                        }
+                                        if (ddata && ddata.finalGrade !== undefined) {
+                                            html += '<td>' + ddata.finalGrade + '</td>';
+                                            final = ddata.finalGrade; 
+                                        }
+
+                                        if(!midTermFound && !quizTotal  && !final){
+                                            html += '<td>0</td>';
+                                        }
+                                        else{
+                                            total = midTermFound*0.35+ quizTotal*0.15+final*0.50; 
+                                            html += '<td>' + total +'%'+ '</td>';
+                                        }
+                                        if(total<60){
+                                            html += '<td><b>Failed</b></td>';
+                                        }
+                                        else {
+                                            html += '<td><b>Passed</b></td>';
+                                        }
+
+
+
+                                        break; 
+                                    }
+                                }
+                                if (!midTermFound) {
+                                    html += '<td>0</td>';
+                                }
+  
+                                if (quizTotal === 0) {
+                                    html += '<td>0</td>';
+                                } 
+                                if (final === 0) {
+                                    html += '<td>0</td>';
+                                } 
+                                if (total == undefined) {
+                                    html += '<td>0</td>';
+                                    html += '<td><b>Data Pending</b></td>';
+                                    html += '<td><button subjectname="' + entry.student.subject + '" subject="' + entry.course.id + '" data-student-id="' + entry.student.studentId + '"  class="btn btn-success ScoreStudent">Score</button></td>';                                html += '</tr>';
+                                } 
+                                else{
+                                    html += '<td><button disabled subjectname="' + entry.student.subject + '" subject="' + entry.course.id + '" data-student-id="' + entry.student.studentId + '"  class="btn btn-success ScoreStudent">Score</button></td>';html += '</tr>';
+
+                                }
+
                             });
                             $('#enrollmentTableBody').html(html); 
                             $('#enrollmentTable').DataTable({
                                 "paging": true, 
                                 "searching": true 
                             });
+
+                 
 
 
 
@@ -197,6 +277,106 @@ $(document).ready(function () {
     
     fetchLectureData();
 
+    $(document).on("click", ".ScoreStudent", function() {
+        var studentName = $(this).closest('tr').find('td:first').text();
+        var subject = $(this).attr('subjectname');
+        var subjectID=$(this).attr('subject');
+        var stuid=$(this).attr("data-student-id");
+
+        // Create modal dynamically
+        var modalHtml = '<div class="modal fade" id="scoreModal" tabindex="-1" role="dialog" aria-labelledby="scoreModalLabel" aria-hidden="true">';
+        modalHtml += '<div class="modal-dialog" role="document">';
+        modalHtml += '<div class="modal-content">';
+        modalHtml += '<div class="modal-header">';
+        modalHtml += '<h5 class="modal-title" id="scoreModalLabel">Enter Scores for ';
+        modalHtml += '<span id="ModelStudentName">' + studentName + '</span> - ';
+        modalHtml += '<span id="ModelSubjectID">' + subjectID + '</span> ';
+        modalHtml += '<span id="ModelSubject">' + subject + '</span>';
+        modalHtml += '<span style="display:none" id="ModelStuID">' + stuid + '</span>';
+        modalHtml += '</h5>';        modalHtml += '<button type="button" class="close" data-dismiss="modal" aria-label="Close">';
+        modalHtml += '<span aria-hidden="true">&times;</span>';
+        modalHtml += '</button>';
+        modalHtml += '</div>';
+        modalHtml += '<div class="modal-body">';
+        modalHtml += '<div class="form-group">';
+        modalHtml += '<label for="midtermScore">Midterm Score:</label>';
+        modalHtml += '<input type="text" class="form-control" id="midtermScore">';
+        modalHtml += '</div>';
+        modalHtml += '<div class="form-group">';
+        modalHtml += '<label for="finalScore">Final Score:</label>';
+        modalHtml += '<input type="text" class="form-control" id="finalScore">';
+        modalHtml += '</div>';
+        modalHtml += '<div class="form-group">';
+        modalHtml += '<label for="quizScore">Quiz Score:</label>';
+        modalHtml += '<input type="text" class="form-control" id="quizScore">';
+        modalHtml += '</div>';
+        modalHtml += '</div>';
+        modalHtml += '<div class="modal-footer">';
+        modalHtml += '<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>';
+        modalHtml += '<button type="button" class="btn btn-primary" id="saveScores">Save Scores</button>';
+        modalHtml += '</div>';
+        modalHtml += '</div>';
+        modalHtml += '</div>';
+        modalHtml += '</div>';
+    
+        // Append modal HTML to the body
+        $('body').append(modalHtml);
+    
+        // Show modal dialog
+        $('#scoreModal').modal('show');
+    
+    
+        $('#scoreModal').on('hidden.bs.modal', function (e) {
+            $(this).remove();
+        });
+    });
+    
+    $(document).on("click", "#saveScores", function() {
+
+        var midtermScore = $('#midtermScore').val();
+        var finalScore = $('#finalScore').val();
+        var quizScore = $('#quizScore').val(); 
+        
+
+        $('#scoreModal').modal('hide');
+        var course = $("#ModelSubjectID").text();
+        var studentID = $("#ModelStuID").text();
+        var midterm = $("#midtermScore").val();
+        var finalGrade = $("#finalScore").val();
+        var quiz = $("#quizScore").val();
+    
+        var scoreData = {
+            student: { studentId: studentID },
+            course: { id: course },
+            midTerm: midterm,
+            finalGrade: finalGrade,
+            quiz: quiz
+        };
+
+    
+
+        $.ajax({
+            type: "POST",
+            url: "/saveScores",
+            contentType: "application/json",
+            data: JSON.stringify(scoreData),
+            success: function(response) {
+                console.log(response);
+                Swal.fire({
+                    title: "Success!",
+                    text: "Scores recorded successfully",
+                    icon: "success"
+                });
+            },
+            error: function(xhr, status, error) {
+                console.error("Error saving scores:", error);
+            }
+        });
+    });
+    
+
+    
+
 
     $(document).on("click", ".approvepermission", function() {
         
@@ -212,20 +392,12 @@ $(document).ready(function () {
                 subject: subject
             },
             success: function(response) {
-               console.log(response);
             },
             error: function(xhr, status, error) {
                 Swal.fire({
                     title: "Success!",
                     text: "Permission has been approve successfully!",
                     icon: "success"
-                }).then(function(){
-                    $("#managebtnpermission").css("display", "none");
-                    
-                    setTimeout(function() {
-                    $("#managebtnpermission").css("display", "block");
-
-                    }, 0.1 * 60 * 1000);                    
                 })
             }
         });
@@ -235,7 +407,6 @@ $(document).ready(function () {
     $(document).on("click", ".rejectpermission", function() {
         var studentID = $(this).attr("data-student-id");
         var subject = $(this).attr("subject");
-        
         $.ajax({
             type: "POST",
             url: "rejectpermission",
@@ -251,10 +422,21 @@ $(document).ready(function () {
                 })
             },
             error: function(xhr, status, error) {
-                alert("reject");
+                Swal.fire({
+                    title: "Success!",
+                    text: "Reject Permission",
+                    icon: "error"
+                })
             }
         });
     });
+
+
+
+
+
+
+
 
 
     $(document).on("click", ".permissionpermission", function() {
@@ -269,14 +451,13 @@ $(document).ready(function () {
                 subject: subject
             },
             success: function(response) {
+            },
+            error: function(xhr, status, error) {
                 Swal.fire({
                     title: "Success!",
                     text: "Permission",
                     icon: "warning"
                 })
-            },
-            error: function(xhr, status, error) {
-                // Handle error response if needed
             }
         });
     });
@@ -409,8 +590,12 @@ $(document).ready(function () {
 
     });
 
-
     
+
+
+
+
+
 
 
     function retrieveLectureProfileByUsername() {
@@ -427,6 +612,11 @@ $(document).ready(function () {
         });
     }
         retrieveLectureProfileByUsername();
+
+
+
+
+
     
 
     $("#leavebtn").on("click", () => {

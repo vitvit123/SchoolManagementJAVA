@@ -684,9 +684,6 @@ $(document).ready(function() {
 
             if (responseData[i].leaveId == buttonattr) {
                     var d=responseData[i];
-        
-                    console.log(d.isCompleted);
-
                     if(d.isCompleted=='1'){
                         $("#btnApproveRequest").css("display","none");
                         $("#btnRejectRequest").css("display","none");
@@ -718,6 +715,7 @@ $(document).ready(function() {
                     $("#reason").val(d.reason);
                     $("#Approver").val(d.adminid.adminId);
                     $("#classId").val(d.myClass.classId);
+                    console.log(d.studyTime.timeId);
                     $("#time").val(d.studyTime.timeId);
 
 
@@ -828,7 +826,7 @@ $(document).ready(function() {
         formData.append('email', $("#studentEmail").val());
         formData.append('dob', $("#studentDOB").val());
         formData.append('address', $("#studentAddress").val());
-        formData.append('studentProfile', $("#studentProfile")[0].files[0]); // Append file data
+        formData.append('studentProfile', $("#studentProfile")[0].files[0]); 
         formData.append('studentPhoneNumber', $("#studentPhoneNumber").val());
         formData.append('parentName', $("#parentName").val());
         formData.append('parentPhoneNumber', $("#parentPhoneNumber").val());
@@ -1261,8 +1259,17 @@ $('#course').change(function() {
    
             $('#studentSelect').empty(); 
             if (response.length > 0) {
+                
+                
                 response.forEach(function(student) {
-                    $('#studentSelect').append(`<option value="${student.studentId}">${student.fullname}</option>`);
+                    console.log();
+                    if(student.isEnrollment==true)
+                    {
+                    }
+                    else{
+                        $('#studentSelect').append(`<option value="${student.studentId}">${student.fullname}</option>`);
+                    }
+
                 });
             } else {
                 $('#studentSelect').append(`<option value="">No students found for the selected subject</option>`);
@@ -1314,7 +1321,6 @@ $("#btn-enrollment").on("click", (event) => {
         lecturer: { lecturerId: lecturerId }
     };
 
-    console.log(enrollmentData);
 
     $.ajax({
         url: '/enrollments',
@@ -1330,12 +1336,10 @@ $("#btn-enrollment").on("click", (event) => {
         },
         error: function (xhr, status, error) {
             console.error('Error occurred while enrolling:', xhr.responseText.trim());
-            // Extract error message from xhr object
             var errorMessage = xhr.responseText.trim();
             if (errorMessage === '') {
                 errorMessage = 'Unknown error occurred';
             }
-            // Display error message to the user
             alert('Error occurred while enrolling: ' + errorMessage);
         }
     });

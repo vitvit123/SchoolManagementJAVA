@@ -10,9 +10,7 @@ $(document).ready(function() {
       $("#studentNamebox").val(studentName);
 
 
-
-
-
+    var studentId;
       function fetchstudentData() {
         $.ajax({
             url: "/getAllstudent",
@@ -20,7 +18,7 @@ $(document).ready(function() {
             dataType: "json",
         success: function(student) {
             var username = $("#studentNamebox").val();
-            var studentId;
+            
             student.forEach(function(student) {
                 if (student.fullname === username) {
                     studentId = student.studentId;
@@ -37,43 +35,6 @@ $(document).ready(function() {
                         }
                     });
 
-
-
-
-            //         $.ajax({
-            //             url: `/requestresult/${lecturerId}`, 
-            //             type: 'GET',
-            //             success: function(response) {
-            //                 console.log('Leave requests received from server:', response);
-            //             },
-            //             error: function(xhr, status, error) {
-            //                 console.error('Error:', xhr.status, xhr.statusText, error);
-            //             }
-            //         });
-
-
-
-
-            
-            
-            
-            //         $.ajax({
-            //             url: "/admins",
-            //             type: "GET",
-            //             dataType: "json",
-            //             success: function(response) {
-            //                 var approverSelect = $("#Approver");
-            //                 approverSelect.empty();
-            //                 $.each(response, function(index, admin) {
-            //                     approverSelect.append($("<option>", {
-            //                         value: admin.adminId,
-            //                         text: admin.username 
-            //                     }));
-            //                 });
-            //             },
-            //             error: function(xhr, status, error) {
-            //             }
-            //         });
 
         }
     });
@@ -106,6 +67,50 @@ $(document).ready(function() {
         });
 
     });
+
+    function retrieveScores() {
+
+        $.ajax({
+            type: "GET",
+            url: "/retrievescores",
+            contentType: "application/json",
+            success: function(response) {
+                var response=response.reverse();
+
+
+                for (var i = 0; i < response.length; i++) {
+                    if (response[i].student.studentId == studentId) {
+                        var midtermScore = response[i].midTerm;
+                        var quizScore = response[i].quiz;
+                        var finalScore = response[i].finalGrade;
+
+                        var totalScore = (quizScore * 0.15 + midtermScore * 0.35 + finalScore * 0.50) / 100;
+            
+
+                        document.getElementById("midterm_score").innerText = midtermScore;
+                        document.getElementById("quiz_score").innerText = quizScore;
+                        document.getElementById("final_score").innerText = finalScore;
+                        document.getElementById("total_score").innerText = (totalScore * 100).toFixed(2) + "%"; // Showing total score with 2 decimal places and percentage
+                    
+        
+                        if (totalScore >= 0.6) {
+                          document.getElementById("pass_fail_note").innerText = "Congratulations! You passed the course.";
+                        } else {
+                          document.getElementById("pass_fail_note").innerText = "Unfortunately, you did not pass the course.";
+                        }
+                    }
+                }
+
+
+
+            },
+            error: function(xhr, status, error) {
+                console.error("Error retrieving scores:", error);
+            }
+        });
+    }
+
+    retrieveScores();
 
 
     function closeAllTabs(){

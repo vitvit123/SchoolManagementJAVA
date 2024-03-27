@@ -14,8 +14,8 @@ public class Score {
     @JoinColumn(name = "StudentID")
     private Student student;
 
-    @ManyToOne
-    @JoinColumn(name = "CourseID")
+    @ManyToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name = "id")
     private Course course;
 
     @Column(name = "Quiz")
