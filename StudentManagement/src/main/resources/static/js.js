@@ -1332,6 +1332,53 @@ $("#btn-enrollment").on("click", (event) => {
                 title: "Success!",
                 text: "Enrollment Sucessful!",
                 icon: "success"
+            }).then(()=>{
+                var selectedSubject = $("#course").val();
+    $.ajax({
+        type: "GET",
+        url: `/studentsBySubject/${selectedSubject}`,
+        success: function(response) {
+   
+            $('#studentSelect').empty(); 
+            if (response.length > 0) {
+                
+                
+                response.forEach(function(student) {
+                    console.log();
+                    if(student.isEnrollment==true)
+                    {
+                    }
+                    else{
+                        $('#studentSelect').append(`<option value="${student.studentId}">${student.fullname}</option>`);
+                    }
+
+                });
+            } else {
+                $('#studentSelect').append(`<option value="">No students found for the selected subject</option>`);
+            }
+        },
+        error: function(xhr, status, error) {
+        }
+    });
+
+
+    $.ajax({
+        type: "GET",
+        url: `/lecturesBySkill/${selectedSubject}`,
+        success: function(response) {
+            $('#lecturerSelect').empty(); 
+            if (response.length > 0) {
+                response.forEach(function(lecture) {
+                    $('#lecturerSelect').append(`<option value="${lecture.lecturerId}">${lecture.fullname}</option>`);
+                });
+            } else {
+                $('#lecturerSelect').append(`<option value="">No lectures found for the selected skill</option>`);
+            }
+        },
+        error: function(xhr, status, error) {
+            alert("Failed to fetch lectures by skill.");
+        }
+    });
             })
         },
         error: function (xhr, status, error) {
